@@ -83,7 +83,7 @@ class Card():
 
 #Function to test Card and Side Class
 def test():
-    '''Purpose of this class is to ensure that the data passed to a cards sides and global data is displayed correctly'''
+    '''Purpose of this class is to ensure that the data passed to a cards unique side and global data is displayed correctly'''
     #Example Bot Card Definition
 
     #Define Bot Side
