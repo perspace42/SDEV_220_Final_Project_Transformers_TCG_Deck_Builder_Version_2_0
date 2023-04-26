@@ -1,6 +1,6 @@
 '''
 Authors: Scott Field, Reece Harkness
-Version: 1.0
+Version: 2.0
 Date: 4/19/2023
 Program Name: Create_Database
 Program Purpose: Create the database that the project will be using
@@ -22,7 +22,8 @@ conn = db.cursor()
 sql = ""
 sql += "Create TABLE IF NOT EXISTS Bot("
 #Name and subName are compound Primary Keys
-sql += "[name],[subName] TEXT PRIMARY KEY,"
+sql += "[name] TEXT," #Got Rid of Primary Key Here SQlite3 automatically defines primary key so it was unnecessary for me to do it here, as composite primary keys did not work as expected
+sql += "[subName] TEXT," 
 sql += "[cardType] TEXT,"
 #A Transformer Bot Card Can Be Uniquely Identified By Its Name + Subname
 sql += "[cost] INTEGER,"
@@ -60,22 +61,6 @@ sql += "[attack] INTEGER,"
 sql += "[health] INTEGER,"
 sql += "[defense] INTEGER,"
 sql += "[text] TEXT,"
-#Foreign Key Must Be At The End Of The SQL Query
-sql += "FOREIGN KEY([subName]) REFERENCES Bot([subName]),"
-sql += "FOREIGN KEY([name]) REFERENCES Bot([name])"
-sql += ")"
-print(sql)
-conn.execute(sql)
-
-#Create TitanMaster Table
-sql = ""
-sql += "Create TABLE IF NOT EXISTS TitanMaster("
-sql += "[name] TEXT,"
-sql += "[subName] TEXT,"
-sql += "[cardType] TEXT,"
-sql += "[cost] INTEGER,"
-sql += "[loyalty] TEXT,"
-sql += "path TEXT,"
 #Foreign Key Must Be At The End Of The SQL Query
 sql += "FOREIGN KEY([subName]) REFERENCES Bot([subName]),"
 sql += "FOREIGN KEY([name]) REFERENCES Bot([name])"
@@ -146,7 +131,7 @@ sql += ")"
 print(sql)
 conn.execute(sql)
 
-#Create BattleMaster For Upgrade Side of Battle Master Transformers (Bots)
+#Create BattleUpgrade Table For Upgrade Side of Battle Master Transformers (Bots)
 sql = ""
 sql += "Create TABLE IF NOT EXISTS BattleUpgrade("
 sql += "[name] TEXT,"
@@ -191,7 +176,8 @@ sql += "Create TABLE IF NOT EXISTS Action("
 sql += "[name] TEXT PRIMARY KEY,"
 sql += "[icon] TEXT,"
 sql += "[text] TEXT,"
-sql += "[cost] INTEGER"
+sql += "[cost] INTEGER,"
+sql += "[path] TEXT"
 sql += ")"
 print(sql)
 conn.execute(sql)
@@ -202,7 +188,8 @@ sql += "Create TABLE IF NOT EXISTS SecretAction("
 sql += "[name] TEXT PRIMARY KEY ,"
 sql += "[icon] TEXT,"
 sql += "[text] TEXT,"
-sql += "[cost] INTEGER"
+sql += "[cost] INTEGER,"
+sql += "[path] TEXT"
 sql += ")"
 print(sql)
 conn.execute(sql)
@@ -216,7 +203,8 @@ sql += "[subtype] TEXT,"
 sql += "[attack] INTEGER,"
 sql += "[defense] INTEGER,"
 sql += "[text] TEXT,"
-sql += "[cost] INTEGER"
+sql += "[cost] INTEGER,"
+sql += "[path] TEXT"
 sql += ")"
 print(sql)
 conn.execute(sql)
@@ -224,10 +212,11 @@ conn.execute(sql)
 
 #Create Strategem Cards Table
 sql = ""
-sql += "Create TABLE IF NOT EXISTS Strategem("
+sql += "Create TABLE IF NOT EXISTS Stratagem("
 sql += "[name] TEXT PRIMARY KEY,"
 sql += "[cost] INTEGER,"
-sql += "[text] TEXT"
+sql += "[text] TEXT,"
+sql += "[path] TEXT"
 sql += ")"
 print(sql)
 conn.execute(sql)
