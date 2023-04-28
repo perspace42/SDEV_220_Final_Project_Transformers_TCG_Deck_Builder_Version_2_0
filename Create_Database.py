@@ -72,10 +72,8 @@ conn.execute(sql)
 sql = ""
 sql += "Create TABLE IF NOT EXISTS HeadMode("
 sql += "[name] TEXT,"
-sql += "[subName] TEXT,"
 sql += "[text] TEXT," #Remember The Important Text in a HeadMode is where the name is on any other card
 #Foreign Key Must Be At The End Of The SQL Query
-sql += "FOREIGN KEY([subName]) REFERENCES Bot([subName]),"
 sql += "FOREIGN KEY([name]) REFERENCES Bot([name])"
 sql += ")"
 print(sql)
@@ -223,6 +221,11 @@ conn.execute(sql)
 
 #Commit Data To Database
 db.commit()
+
+#Close Database After Finished
+conn.close()
+db.close()
+
 
 
 

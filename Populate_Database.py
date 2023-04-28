@@ -1,7 +1,7 @@
 '''
 Author: Scott Field
 Version: 2.0
-Date: 4/25/2023
+Date: 4/26/2023
 Program Name: Populate_Database
 Program Purpose: Populate the database that the project will be using
 '''
@@ -146,7 +146,7 @@ sql += "("
 sql += "'Blast Shield'," #Name
 sql += "'Blue'," #Icon
 sql += "'Armor'," #Subtype
-sql += "'None'," #Attack
+sql += "0," #Attack
 sql += "2," #Defense
 sql += "'After the upgraded character defends -> Scrap this card.'," #Text
 sql += "0," #Cost
@@ -309,7 +309,7 @@ db.commit()
 sql = "INSERT INTO Bot(name,cardType,cost,loyalty,path) VALUES"
 sql += "("
 sql += "'Autobot Stylor'," #Name
-sql += "'TitanMaster'," #CardType
+sql += "'TitanMaster Head'," #CardType
 sql += "2," #Cost
 sql += "'Autobot'," #Loyalty
 sql += "'./img/bot/autobot_stylor.jpg'" #Image File Path
@@ -318,7 +318,6 @@ sql += ")"
 conn.execute(sql)
 db.commit()
 
-#Continue Editing Database Here
 sql = "INSERT INTO BotMode(name,traits,attack,health,defense,text) VALUES"
 sql += "("
 sql += "'Autobot Stylor'," #Name
@@ -332,10 +331,9 @@ sql += ")"
 conn.execute(sql)
 db.commit()
 
-sql = "INSERT INTO HeadMode(name,subName,text) VALUES"
+sql = "INSERT INTO HeadMode(name,text) VALUES"
 sql += "("
 sql += "'Autobot Stylor'," #Name
-sql += "' '," #SubName
 sql += "'+1 Defense (This begins in head mode on the alt mode of a character that has a body mode. When that character is KO, even if it was your last character, deploy this to the battlefield in bot mode.)'" #Text
 sql += ")"
 
@@ -347,7 +345,7 @@ sql = "INSERT INTO Bot(name,subName,cardType,cost,loyalty,path) VALUES"
 sql += "("
 sql += "'Captain Astrotrain'," #Name
 sql += "'Space Force-Transport'," #SubName
-sql += "'Bot'," #CardType
+sql += "'Multiform'," #CardType
 sql += "12," #Cost
 sql += "'Decepticon'," #Loyalty
 sql += "'./img/bot/captain_astrotrain.jpg'" #Path
@@ -430,7 +428,7 @@ sql = "INSERT INTO AltMode(name,subName,traits,attack,health,defense,text) VALUE
 sql += "("
 sql += "'Captain Impactor'," #Name
 sql += "'Special Ops-Wrecker'," #SubName
-sql += "'Leader, Tank, and Ranged'," #Traits
+sql += "'Leader Tank Ranged'," #Traits
 sql += "3," #Attack
 sql += "12," #Health
 sql += "2," #Defense
@@ -445,7 +443,7 @@ sql = "INSERT INTO Bot(name,subName,cardType,cost,loyalty,path) VALUES"
 sql += "("
 sql += "'Captain Omega Supreme'," #Name
 sql += "'Transport-City Defender'," #SubName
-sql += "'Bot'," #CardType
+sql += "'Combiner'," #CardType
 sql += "22," #Cost
 sql += "'Autobot'," #Loyalty
 sql += "'./img/bot/captain_omega_supreme.jpg'" #Path
@@ -555,7 +553,7 @@ db.commit()
 sql = "INSERT INTO Bot(name,cardType,cost,loyalty,path) VALUES"
 sql += "("
 sql += "'Chasm'," #Name
-sql += "'TitanMaster'," #CardType
+sql += "'TitanMaster Head'," #CardType
 sql += "4," #Cost
 sql += "'Decepticon'," #Loyalty
 sql += "'./img/bot/chasm.jpg'" #Path
@@ -577,10 +575,9 @@ sql += ")"
 conn.execute(sql)
 db.commit()
 
-sql = "INSERT INTO HeadMode(name,subName,text) VALUES"
+sql = "INSERT INTO HeadMode(name,text) VALUES"
 sql += "("
 sql += "'Chasm'," #Name
-sql += "' '," #SubName
 sql += "'+2 Attack (This begins in head mode on the alt mode of a character that has a body mode. When that character is KO, even if it was your last character, deploy this to the battlefield in bot mode.)'" #Text
 sql += ")"
 
@@ -718,7 +715,7 @@ sql = "INSERT INTO Bot(name,subName,cardType,cost,loyalty,path) VALUES"
 sql += "("
 sql += "'Megatron'," #Name
 sql += "'Fallen Hero'," #SubName
-sql += "'Bot'," #CardType
+sql += "'TitanMaster Body'," #CardType
 sql += "11," #Cost
 sql += "'Decepticon'," #Loyalty
 sql += "'./img/bot/megatron_fallen_hero.jpg'" #Path
@@ -760,7 +757,7 @@ sql = "INSERT INTO Bot(name,subName,cardType,cost,loyalty,path) VALUES"
 sql += "("
 sql += "'Optimus Prime'," #Name
 sql += "'Legendary Warrior'," #SubName
-sql += "'Bot'," #CardType
+sql += "'TitanMaster Body'," #CardType
 sql += "12," #Cost
 sql += "'Autobot'," #Loyalty
 sql += "'./img/bot/optimus_prime_legendary_warrior.jpg'" #Path
@@ -801,8 +798,8 @@ db.commit()
 sql = "INSERT INTO Bot(name,subName,cardType,cost,loyalty,path) VALUES"
 sql += "("
 sql += "'Private Firedrive'," #Name
-sql += "'Ground Command-Artillery '," #SubName
-sql += "'Bot'," #CardType
+sql += "'Ground Command-Artillery'," #SubName
+sql += "'Battle Master'," #CardType
 sql += "7," #Cost
 sql += "'Autobot'," #Loyalty
 sql += "'./img/bot/private_firedrive.jpg'" #Path
@@ -844,8 +841,8 @@ db.commit()
 sql = "INSERT INTO Bot(name,subName,cardType,cost,loyalty,path) VALUES"
 sql += "("
 sql += "'Private Lionizer'," #Name
-sql += "'Ground Command-Artillery '," #SubName
-sql += "'Bot'," #CardType
+sql += "'Ground Command-Artillery'," #SubName
+sql += "'Battle Master'," #CardType
 sql += "7," #Cost
 sql += "'Autobot'," #Loyalty
 sql += "'./img/bot/private_lionizer.jpg'" #Path
@@ -857,7 +854,7 @@ db.commit()
 sql = "INSERT INTO BattleUpgrade(name,subName,upgradeName,traits,subType,attack,defense,text) VALUES"
 sql += "("
 sql += "'Private Lionizer'," #Name
-sql += "'Ground Command-Artillery '," #SubName
+sql += "'Ground Command-Artillery'," #SubName
 sql += "'RS Firesteel Saber'," #upgradeName
 sql += "'BattleMaster'," #Traits
 sql += "'Weapon'," #subType
@@ -888,7 +885,7 @@ sql = "INSERT INTO Bot(name,subName,cardType,cost,loyalty,path) VALUES"
 sql += "("
 sql += "'Private Pterazadon'," #Name
 sql += "'Air Command-Artillery'," #SubName
-sql += "'Bot'," #CardType
+sql += "'Battle Master'," #CardType
 sql += "6," #Cost
 sql += "'Autobot'," #Loyalty
 sql += "'./img/bot/private_pteraxadon.png'" #Path
@@ -915,7 +912,7 @@ db.commit()
 sql = "INSERT INTO BotMode(name,subName,traits,attack,health,defense,text) VALUES"
 sql += "("
 sql += "'Private Pterazadon'," #Name
-sql += "'Air Command-Artillery '," #SubName
+sql += "'Air Command-Artillery'," #SubName
 sql += "'BattleMaster Melee'," #Traits
 sql += "3," #Attack
 sql += "9," #Health
@@ -973,7 +970,7 @@ sql = "INSERT INTO Bot(name,subName,cardType,cost,loyalty,path) VALUES"
 sql += "("
 sql += "'Raider Aimless'," #Name
 sql += "'Air Force-Weapons'," #SubName
-sql += "'Bot'," #CardType
+sql += "'Battle Master'," #CardType
 sql += "7," #Cost
 sql += "'Decepticon'," #Loyalty
 sql += "'./img/bot/raider_aimless.jpg'" #Path
@@ -1016,7 +1013,7 @@ sql = "INSERT INTO Bot(name,subName,cardType,cost,loyalty,path) VALUES"
 sql += "("
 sql += "'Raider Apeface'," #Name
 sql += "'Espionage-Commando'," #SubName
-sql += "'Bot'," #CardType
+sql += "'Multiform'," #CardType
 sql += "10," #Cost
 sql += "'Decepticon'," #Loyalty
 sql += "'./img/bot/raider_apeface.jpg'" #Path
@@ -1072,7 +1069,7 @@ sql = "INSERT INTO Bot(name,subName,cardType,cost,loyalty,path) VALUES"
 sql += "("
 sql += "'Raider Blowpipe'," #Name
 sql += "'Air Force-Weapons'," #SubName
-sql += "'Bot'," #CardType
+sql += "'Battle Master'," #CardType
 sql += "5," #Cost
 sql += "'Decepticon'," #Loyalty
 sql += "'./img/bot/raider_blowpipe.jpg'" #Path
@@ -1157,7 +1154,7 @@ sql = "INSERT INTO Bot(name,subName,cardType,cost,loyalty,path) VALUES"
 sql += "("
 sql += "'Specialist Sandstorm'," #Name
 sql += "'Special Ops-Advance Guard'," #SubName
-sql += "'Bot'," #CardType
+sql += "'Multiform'," #CardType
 sql += "11," #Cost
 sql += "'Autobot'," #Loyalty
 sql += "'./img/bot/specialist_sandstorm.jpg'" #Path
@@ -1297,7 +1294,7 @@ sql = "INSERT INTO Bot(name,subName,cardType,cost,loyalty,path) VALUES"
 sql += "("
 sql += "'Tidal Wave'," #Name
 sql += "'Dark Fleet'," #SubName
-sql += "'Bot'," #CardType
+sql += "'Combiner'," #CardType
 sql += "24," #Cost
 sql += "'Decepticon'," #Loyalty
 sql += "'./img/bot/tidal_wave_dark_fleet.jpg'" #Path

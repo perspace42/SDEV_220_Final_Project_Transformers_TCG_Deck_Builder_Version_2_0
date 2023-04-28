@@ -16,12 +16,12 @@ class Side():
         #Strategem Values (Values Almost Any Card Will Have)
         self.name = dataDict.get("name",None)
         self.text = dataDict.get('text',None)
-        self.cost = dataDict.get('cost',0)
-        self.imagePath = dataDict.get('path','error.png')
         
         #Bot Card Values
         self.subName = dataDict.get("subName",None)
         self.traits = dataDict.get('traits',None)
+
+        self.upgradeName = dataDict.get("upgradeName",None)
 
         self.attack = dataDict.get('attack',None)
         self.health = dataDict.get('health',None)
@@ -32,6 +32,7 @@ class Side():
         #Battle Card Values
         self.subType = dataDict.get("subType",None)
         self.icon = dataDict.get("icon",None)
+
 
     #string method for print function
     def __str__(self):
@@ -47,8 +48,7 @@ class Card():
         self.dataDict = dataDict
         #store the data unique to each side on the card
         self.sideList = sideList
-        #get number of sides on the card
-        self.size = len(sideList)
+        
         
         #Store card Global Data (This data does not change when the card is flipped)
         self.cardType = dataDict.get("cardType", None)
@@ -76,7 +76,7 @@ class Card():
         #get global data from card
         outputString = str(self.dataDict) + "\n"
         #get unique data from sides for any number of sides
-        for i in range(self.size):
+        for i in range(len(self.sideList)):
             outputString += str(self.sideList[i].dataDict) + "\n"
 
         return outputString
@@ -123,4 +123,4 @@ def test():
     print(testTransformer)
     
 #call test function
-test()
+#test()
