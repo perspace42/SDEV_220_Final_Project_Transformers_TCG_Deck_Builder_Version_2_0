@@ -1,4 +1,67 @@
 #Create function for reading and loading ard data to and from the program using a txt file.
+
+1. strat
+2. bot card
+3. battle card
+
+Card_Data.py
+BOT_START ='bot'
+BATTLE_START = 'battle'
+STRAT_START = 'strat'
+
+FILE_NAME = 'file.txt'
+def read_cards():
+    bot_cards = []
+    strat_cards = []
+    bat_cards = []
+    with open(FILE_NAME) as f:
+        lines = f.readlines()
+        for line in lines:
+            line = line.rstrip()
+            list_line = line.split()
+            word = list_line[0]
+            if list_line ==BOT_START:
+                bot_cards.append(line)
+            elif word == BATTLE_START:
+                bat_cards.append(line)
+             elif word == STRAT_START:
+                strat_cards.append(line)
+             else:
+                print('Unknown cards')
+              return bot_cards,strat_cards,bat_cards/
+  #
+
+BOT_START = 'bot'
+BATTLE_START ='battle'
+STRAT_START = 'strat'
+
+FILE_NAME ='cardfile.txt'
+def read-cards =[]
+    bot_cards = []
+    strat_cards = []
+    bat_cards = []
+    with open(FILE_NAME) as f:
+        lines = f.readlines()
+        for line in lines:
+            line = line.rstrip()
+            list_line = line.split()
+            word = list_line[0]
+         if list_line == BOT_START:
+            bot_cards.append(line)
+         elif word == BATTLE_START:
+            bat_cards.append(line)
+          elif word == STRAT_START:
+            strat_cards.append(line)
+          else:
+            prrint('Unknown cards')
+     return bot_cards,strat_cards,bat_cards
+
+def main():
+    bot_cards,strat_cards,bat_cards =read_cards()
+    print('bot_cards=',bot_cards)
+    print('strat_cards=',bot-cards)
+    print('bat_cards=',bot_cards)
+
 def add_names_to_txt(names, file_name):
     """
     Args:
