@@ -41,13 +41,16 @@ class App(QWidget):
         #Set Treeview Background Color
         self.setStyleSheet("background-color: grey")
         
+        #Create Items That Will Be Added To Treeview
         self.model = self.createDataModel(self)
         self.dataView.setModel(self.model)
 
+        #Create Layout
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.dataView)
         self.setLayout(mainLayout)
         
+        #Draw Placed Widgets
         self.show()
 
     def createDataModel(self,parent):
