@@ -826,7 +826,6 @@ stratagemCardList += addStratagemCards(conn)
 print("All Bot Cards\n")
 for i in range(len(botCardList)):
     print(botCardList[i])
-    #print(botCardList[i].dataDict["traits"])
 print("\n")
 
 #Print All Added Battle Cards
