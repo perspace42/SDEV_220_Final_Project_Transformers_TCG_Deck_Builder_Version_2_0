@@ -1,5 +1,5 @@
 '''
-Author: Scott Field
+Author: Scott Field, Reece Harkness
 Version: 2.0
 Date: 4/26/2023
 Program Name: Populate_Database
