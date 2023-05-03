@@ -23,8 +23,8 @@ class App(QWidget):
         self.title = 'Window Title'
         self.left = 20
         self.top = 10
-        self.width = 320
-        self.height = 120
+        self.width = 500
+        self.height = 500
         self.initUI()
 
     #Set Treeview attributes    
@@ -32,25 +32,20 @@ class App(QWidget):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
         
-        self.dataGroupBox = QGroupBox("Group Box Title")
+        #Define Treeview
         self.dataView = QTreeView()
-        
+
         #Remove space from treeview
         self.dataView.setRootIsDecorated(False)
 
         #Set Treeview Background Color
         self.setStyleSheet("background-color: grey")
         
-        #Set Layout For Treeview To Be In
-        dataLayout = QHBoxLayout()
-        dataLayout.addWidget(self.dataView)
-        self.dataGroupBox.setLayout(dataLayout)
-        
         self.model = self.createDataModel(self)
         self.dataView.setModel(self.model)
 
         mainLayout = QVBoxLayout()
-        mainLayout.addWidget(self.dataGroupBox)
+        mainLayout.addWidget(self.dataView)
         self.setLayout(mainLayout)
         
         self.show()
@@ -103,7 +98,10 @@ class App(QWidget):
             #Add Color To Both Columns
             model.setData(model.index(0, self.NAME), QBrush(QColor(r,g,b)), Qt.BackgroundRole)
             model.setData(model.index(0, self.COST), QBrush(QColor(r,g,b)), Qt.BackgroundRole)
-
+        
+        #Set Column Width (Must Be Set After Adding Data)
+        self.dataView.setColumnWidth(self.NAME,300)
+        self.dataView.setColumnWidth(self.COST,5)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
