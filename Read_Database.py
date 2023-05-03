@@ -788,6 +788,8 @@ def addStratagemCards(conn):
     #return list
     return stratagemCardList
 
+
+
 #Create Database Connection
 db = sqlite3.connect('TransformersDatabase.db')
 #Create Database Cursor
