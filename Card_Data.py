@@ -62,7 +62,7 @@ class Card():
     #return a side if the sideName exists, else output an error and return None
     def getSide(self,name):
 
-        for index in range(self.size):
+        for index in range(len(self.sideList)):
             currentSide = self.sideList[index]
 
             if (name == currentSide.sideName):

@@ -1,118 +1,255 @@
 '''
-Author: Scott, Ashton
-Version: 1.0
+Author: Scott
+Version: 2.0
 Name: Card_Selection
-Date: 05/02/2023
-Purpose: Create the card selection section
+Date: 05/07/2023
+Purpose: Create a CardView class to add a Treeview for viewing cards to be added to the UI.py file
 '''
-import sys
-from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItemModel, QBrush, QColor
-from PyQt5.QtWidgets import (QApplication, QGroupBox, QHBoxLayout, QTreeView, QVBoxLayout, QWidget)
+from PyQt5.QtWidgets import  QTreeView, QAbstractItemView
 
 from Read_Database import *
 
-class App(QWidget):
-    #define column locations
-    NAME,COST = range(2)
-    
-    #set size
-    def __init__(self):
-        super().__init__()
-        self.title = 'Window Title'
-        self.left = 20
-        self.top = 10
-        self.width = 500
-        self.height = 500
-        self.initUI()
+#Function To Add bot cards to treeview data model
+def treeBotCards(model,list):
+    for i in range(len(list)):
+        #Get First Card
+        currentCard = list[i]
 
-    #Set Treeview attributes    
-    def initUI(self):
-        self.setWindowTitle(self.title)
-        self.setGeometry(self.left, self.top, self.width, self.height)
+        #Get Name and Cost
+        fullName = currentCard.dataDict['name'] + " " + currentCard.dataDict.get('subName',"")
+        cost = currentCard.dataDict['cost']
+
+            
+        #Insert at Index 0
+        model.insertRow(0)
+        #Insert Full Name Of The Bot
+        model.setData(model.index(0, 0), fullName)
+        #Insert Cost Of The Bot
+        model.setData(model.index(0, 1), cost)
+            
+        #Change Bot Background Color Based On Loyalty
+        #initialize color values for background color
+        r = 0
+        g = 0
+        b = 0
+
+        #if the bot is an Autobot, set the background color values to red
+        if (currentCard.dataDict['loyalty'] == "Autobot"):
+            r = 178
+            g = 0
+            b = 0
+        #if the bot is a Decepticon, set the background color values to purple
+        elif(currentCard.dataDict['loyalty'] == "Decepticon"):
+            r = 67
+            g = 0
+            b = 67
+        #Otherwise the bot is a Mercenary, set the background color values to dark grey    
+        else:
+            r = 51
+            g = 51
+            b = 51
+            
+        #Add Color To Both Columns
+
+        #Add Color To Name Column
+        model.setData(model.index(0, 0), QBrush(QColor(r,g,b)), Qt.BackgroundRole)
+        #Add Color To Cost Column
+        model.setData(model.index(0, 1), QBrush(QColor(r,g,b)), Qt.BackgroundRole)
+
+    #return data model
+    return model
         
-        #Define Treeview
-        self.dataView = QTreeView()
+#Function To Add battle cards to treeview data model
+def treeBattleCards(model,list):
+    for i in range(len(list)):
+        #Get First Card
+        currentCard = list[i]
 
-        #Remove space from treeview
-        self.dataView.setRootIsDecorated(False)
+        #Get Name and Cost
+        fullName = currentCard.dataDict['name']
+        cost = currentCard.dataDict['cost']
 
-        #Set Treeview Background Color
-        self.setStyleSheet("background-color: grey")
+            
+        #Insert at Index 0
+        model.insertRow(0)
+        #Insert Full Name Of The Battle Card
+        model.setData(model.index(0, 0), fullName)
+        #Insert Cost Of The Battle Card
+        model.setData(model.index(0, 1), cost)
+            
+        #Change Battle Card Background Color Based On Loyalty
+        #initialize color values for background color
+        r = 0
+        g = 0
+        b = 0
+
+        #if the card is an Action, set the background color values to white
+        if (currentCard.dataDict['cardType'] == "Action"):
+            r = 255
+            g = 255
+            b = 255
+        #if the card is an Secret Action, set the background color values to dark grey
+        elif(currentCard.dataDict['cardType'] == "Secret Action"):
+            r = 51
+            g = 51
+            b = 51
+        #if the card is an Upgrade Determine its subType by looking at its side, then set its colors accordingly
+        else:
+            #If the card is an Weapon set the background color values to an orange
+            if (currentCard.sideList[0].dataDict['subType'] == "Weapon"):
+                r = 230
+                g = 149
+                b = 0
+            #If the card is an Armor set the background color to a light cyan
+            elif(currentCard.sideList[0].dataDict['subType'] == "Armor"):
+                r = 0
+                g = 255
+                b = 255
+            #If the card is an Utility set the background color values to light grey
+            elif(currentCard.sideList[0].dataDict['subType'] == "Utility"):
+                r = 128
+                g = 128
+                b = 128
+            #If the card is an Weapon Armor set the background color values to light green
+            else:
+                r = 115
+                g = 202
+                b = 128
         
-        #Create Items That Will Be Added To Treeview
+        
+            
+        #Add Color To Both Columns
+
+        #Add Color To Name Column
+        model.setData(model.index(0, 0), QBrush(QColor(r,g,b)), Qt.BackgroundRole)
+        #Add Color To Cost Column
+        model.setData(model.index(0, 1), QBrush(QColor(r,g,b)), Qt.BackgroundRole)
+
+    #return data model
+    return model
+
+#Function To Add stratagem cards to treeview data model (stratagem cards are not color coded)
+def treeStratagemCards(model,list):
+    for i in range(len(list)):
+        #Get First Card
+        currentCard = list[i]
+
+        #Get Name and Cost
+        fullName = currentCard.dataDict['name']
+        cost = currentCard.dataDict['cost']
+
+            
+        #Insert at Index 0
+        model.insertRow(0)
+        #Insert Full Name Of The Battle Card
+        model.setData(model.index(0, 0), fullName)
+        #Insert Cost Of The Battle Card
+        model.setData(model.index(0, 1), cost)
+
+    #return data model
+    return model
+
+class CardView(QTreeView):
+    #Widget must be a QtWidgets.Qwidget
+    def __init__(self,widget):
+        super().__init__(widget)
+
+        #Create Treeview Items
+        #remove left tab space from treeview
+        self.setRootIsDecorated(False)
+        #prevent user from editing treeview items (can still select them)
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        #create data storage container for treeview
         self.model = self.createDataModel(self)
-        self.dataView.setModel(self.model)
+        #add data storage container to treeview
+        self.setModel(self.model)
 
-        #Create Layout
-        mainLayout = QVBoxLayout()
-        mainLayout.addWidget(self.dataView)
-        self.setLayout(mainLayout)
-        
-        #Draw Placed Widgets
-        self.show()
 
-    def createDataModel(self,parent):
+    def createDataModel(self,quantity = 2):
         #Set Column Headers
-        model = QStandardItemModel(0, 2,parent)
-        model.setHeaderData(self.NAME, Qt.Horizontal, "Name")
-        model.setHeaderData(self.COST, Qt.Horizontal, "Cost")
+        model = QStandardItemModel(0, 2)
+        model.setHeaderData(0, Qt.Horizontal, "Name")
+        model.setHeaderData(1, Qt.Horizontal, "Cost")
+
+        #If there is need for a third column, add it
+        if (quantity == 3):
+            model.setHeaderData(2,Qt.Horizontal, "Quantity")
+        
+        #return data model
         return model
     
     def addData(self,model,list):
-        #Add Data From List To Columns
-        for i in range(len(list)):
-            #Get Name and Cost
-            currentCard = list[i]
-            fullName = currentCard.dataDict['name'] + " " + currentCard.dataDict.get('subName',"")
-            cost = currentCard.dataDict['cost']
+        #Add Data From List To Columns (if the given list contains any values)
+        if (len(list) > 0):
+            #Get First Card
+            currentCard = list[0]
 
-            
-            #Insert at Index 0
-            model.insertRow(0)
-            #Insert Full Name Of The Bot
-            model.setData(model.index(0, self.NAME), fullName)
-            #Insert Cost Of The Bot
-            model.setData(model.index(0, self.COST), cost)
-            
-            #Change Bot Background Color Based On Loyalty
-            #initialize color values for background color
-            r = 0
-            g = 0
-            b = 0
+            #Get Card Type
 
-            #if the bot is an Autobot, set the background color values to red
-            if (currentCard.dataDict['loyalty'] == "Autobot"):
-                r = 178
-                g = 0
-                b = 0
-            #if the bot is a Decepticon, set the background color values to purple
-            elif(currentCard.dataDict['loyalty'] == "Decepticon"):
-                r = 67
-                g = 0
-                b = 67
-            #Otherwise the bot is a Mercenary, set the background color values to dark grey    
+            #If Card Type reveals data to contain bot cards, set the data model accordingly
+            if (currentCard.dataDict['cardType'] in ("Battle Master", "BotPiece", "Combiner", "TitanMaster Head", "TitanMaster Body", "Multiform", "Bot")):
+                model = treeBotCards(model,list)
+
+                #Set Column Width (Must Be Set After Adding Data)
+                #Set Name Column Width
+                self.setColumnWidth(0,300)
+                #Set Cost Column Width
+                self.setColumnWidth(1,5)
+
+            #If Card Type reveals data to contain battle cards, set the data model accordingly
+            elif(currentCard.dataDict['cardType'] in ("Upgrade", "Action", "Secret Action")):
+                model = treeBattleCards(model,list)
+
+                #Set Column Width (Must Be Set After Adding Data)
+                #Set Name Column Width
+                self.setColumnWidth(0,250)
+                #Set Cost Column Width
+                self.setColumnWidth(1,5)
+
+            #Otherwise Card Type must be a Stratagem, set the data model accordingly
             else:
-                r = 51
-                g = 51
-                b = 51
-            
-            #Add Color To Both Columns
-            model.setData(model.index(0, self.NAME), QBrush(QColor(r,g,b)), Qt.BackgroundRole)
-            model.setData(model.index(0, self.COST), QBrush(QColor(r,g,b)), Qt.BackgroundRole)
+                model = treeStratagemCards(model,list)
+
+                #Set Column Width (Must Be Set After Adding Data)
+
+                #Set Name Column Width
+                self.setColumnWidth(0,200)
+                #Set Cost Column Width
+                self.setColumnWidth(1,5)
+
+    #Event Handler Does Not Yet Function, I am Working On It
+    def clicked(self):
+        #Get the list of Qmodels within the treeview
+        selectedIndex = self.selectedIndexes()
+
+        #Initialize variables to store the items
+        selectionList = []
+
+        #For the number of Qmodels get the items
+        for i in range(len(selectedIndex)):
+            #track where the index is currently
+            currentIndex = selectedIndex[i]
+            #get the name and cost in each selected item
+            selectedName = self.model(currentIndex.row,0)
+            selectedCost = self.model(currentIndex.row,1)
+
+            #add name and cost to tuple
+            selectionTuple = (selectedName,selectedCost)
+            #append tuple to list
+            selectionList.append(selectionTuple)
+
+        #output the selection
+        print(selectionList)
+
         
-        #Set Column Width (Must Be Set After Adding Data)
-        self.dataView.setColumnWidth(self.NAME,300)
-        self.dataView.setColumnWidth(self.COST,5)
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex = App()
-    ex.addData(ex.model,botCardList)
-    sys.exit(app.exec_())
 
-            
+
+
+
+
             
             
 

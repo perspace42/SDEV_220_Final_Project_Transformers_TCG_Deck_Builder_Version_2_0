@@ -820,7 +820,7 @@ battleCardList += addSecretActionCards(conn)
 #Add Stratagem Cards
 stratagemCardList += addStratagemCards(conn)
 
-#Print Data Added To Lists
+#Print Data Added To Lists (This is run each time Read_Database is accessed for test purposes)
 
 #Print All Added Bot Cards
 print("All Bot Cards\n")
