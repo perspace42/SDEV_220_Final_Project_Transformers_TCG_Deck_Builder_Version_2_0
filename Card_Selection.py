@@ -1,11 +1,11 @@
 '''
 Author: Scott
-Version: 2.0
+Version: 2.1
 Name: Card_Selection
 Date: 05/07/2023
 Purpose: Create a CardView class to add a Treeview for viewing cards to be added to the UI.py file
 '''
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt,QModelIndex
 from PyQt5.QtGui import QStandardItemModel, QBrush, QColor
 from PyQt5.QtWidgets import  QTreeView, QAbstractItemView
 
@@ -166,6 +166,12 @@ class CardView(QTreeView):
         #add data storage container to treeview
         self.setModel(self.model)
 
+        #initialize card data list to empty this list will store the cards currently shown within the treeview
+        self.cardData = []
+
+        #add event listener for treeview when treeview is clicked
+        self.clicked.connect(self.on_clicked)
+
 
     def createDataModel(self,quantity = 2):
         #Set Column Headers
@@ -183,6 +189,8 @@ class CardView(QTreeView):
     def addData(self,model,list):
         #Add Data From List To Columns (if the given list contains any values)
         if (len(list) > 0):
+            #Add Cards To Card List
+            self.cardData = list
             #Get First Card
             currentCard = list[0]
 
@@ -219,8 +227,8 @@ class CardView(QTreeView):
                 #Set Cost Column Width
                 self.setColumnWidth(1,5)
 
-    #Event Handler Does Not Yet Function, I am Working On It
-    def clicked(self):
+    #event handler now prints currently selected card from treeview
+    def on_clicked(self):
         #Get the list of Qmodels within the treeview
         selectedIndex = self.selectedIndexes()
 
@@ -231,18 +239,11 @@ class CardView(QTreeView):
         for i in range(len(selectedIndex)):
             #track where the index is currently
             currentIndex = selectedIndex[i]
-            #get the name and cost in each selected item
-            selectedName = self.model(currentIndex.row,0)
-            selectedCost = self.model(currentIndex.row,1)
+            #use the index to get the name, cost and image string from the selected item
+            item = self.model.itemFromIndex(currentIndex)
+            print(item.text())
 
-            #add name and cost to tuple
-            selectionTuple = (selectedName,selectedCost)
-            #append tuple to list
-            selectionList.append(selectionTuple)
-
-        #output the selection
-        print(selectionList)
-
+            
         
 
 
