@@ -58,10 +58,16 @@ class Ui_MainWindow(object):
         # Create a widget for the bot and its components
         self.Bot = QtWidgets.QWidget()
         self.Bot.setObjectName("Bot")
+
+        #Create Card Preview Image Display Section
+        self.CardPreview = CardPreview(self.centralwidget)
+        self.CardPreview.setGeometry(QtCore.QRect(837, 220, 296, 471))
+        self.CardPreview.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.CardPreview.setObjectName("CardPreview")
         
         #NOTE TO SELF change self.BotCardList to a different name (to easy to confuse with botCardList {which is an actual list})
         #Added Custom CardView Class To Replace TreeView 
-        self.BotCardList = CardView(self.Bot)
+        self.BotCardList = CardView(self.Bot,self.CardPreview)
         #By default the quantity of the data model is set to 2
         self.BotCardList.createDataModel()
         self.BotCardList.addData(self.BotCardList.model,botCardList)
@@ -207,7 +213,7 @@ class Ui_MainWindow(object):
         self.Battle = QtWidgets.QWidget()
         self.Battle.setObjectName("Battle")
         
-        self.BattleCardList = CardView(self.Battle)
+        self.BattleCardList = CardView(self.Battle,self.CardPreview)
         #By default the quantity of the data model is set to 2
         self.BattleCardList.createDataModel()
         self.BattleCardList.addData(self.BattleCardList.model,battleCardList)
@@ -275,7 +281,7 @@ class Ui_MainWindow(object):
         self.Strategem = QtWidgets.QWidget()
         self.Strategem.setObjectName("Strategem")
         
-        self.StrategemCardList = CardView(self.Strategem)
+        self.StrategemCardList = CardView(self.Strategem,self.CardPreview)
         #By default the quantity of the data model is set to 2
         self.StrategemCardList.createDataModel()
         self.StrategemCardList.addData(self.StrategemCardList.model, stratagemCardList)
@@ -304,10 +310,13 @@ class Ui_MainWindow(object):
         self.CardsList.addTab(self.Strategem, "")
 
         # Create and configure the graphics widget to show currently selected card
+        '''
+        This has been commented out to move the CardPreview Section so it can be used as a Parameter
         self.CardPreview = QtWidgets.QGraphicsView(self.centralwidget)
         self.CardPreview.setGeometry(QtCore.QRect(837, 220, 296, 471))
         self.CardPreview.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.CardPreview.setObjectName("CardPreview")
+        '''
         self.SelectedBotCards = QtWidgets.QTreeView(self.centralwidget)
         self.SelectedBotCards.setGeometry(QtCore.QRect(326, 220, 241, 311))
         self.SelectedBotCards.setObjectName("SelectedBotCards")

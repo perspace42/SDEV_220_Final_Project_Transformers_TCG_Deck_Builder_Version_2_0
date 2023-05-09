@@ -10,6 +10,7 @@ from PyQt5.QtGui import QStandardItemModel, QBrush, QColor
 from PyQt5.QtWidgets import  QTreeView, QAbstractItemView
 
 from Read_Database import *
+from Card_Preview import *
 
 #Function To Add bot cards to treeview data model
 def treeBotCards(model,list):
@@ -153,9 +154,10 @@ def treeStratagemCards(model,list):
 
 
 class CardView(QTreeView):
-    #Widget must be a QtWidgets.Qwidget
-    def __init__(self,widget):
-        super().__init__(widget)
+    #Parent Widget must be a QtWidgets.Qwidget
+    #Image Widget must be a QGraphicsScene Widget
+    def __init__(self,parentWidget,imageWidget):
+        super().__init__(parentWidget)
 
         #Create Treeview Items
         #remove left tab space from treeview
@@ -169,6 +171,9 @@ class CardView(QTreeView):
 
         #initialize card data list to empty this list will store the cards currently shown within the treeview
         self.cardData = []
+
+        #initialize card preview widget this will display the image of the last card selected within the treeview
+        self.imageWidget = imageWidget
 
         #add event listener for treeview when treeview is clicked
         self.clicked.connect(self.on_clicked)
@@ -248,10 +253,15 @@ class CardView(QTreeView):
             #add selection to test
             text += item.text() + " "
         
+        path = self.cardData[currentRow].dataDict["path"]
         #print results of selection (useful when debugging)
+        print("\nNEW SELECTION\n")
         print("Selection Text:",text)
         print("Selection Row:", currentRow)
-        print("Selection Image String:", self.cardData[currentRow].dataDict["path"])
+        print("Selection Image String:", path)
+
+        #add image to image preview
+        self.imageWidget.addImage(path)
 
     
 
