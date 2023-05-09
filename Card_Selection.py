@@ -13,7 +13,7 @@ from Read_Database import *
 
 #Function To Add bot cards to treeview data model
 def treeBotCards(model,list):
-    for i in range(len(list)):
+    for i in range(len(list)-1,-1,-1):
         #Get First Card
         currentCard = list[i]
 
@@ -63,7 +63,7 @@ def treeBotCards(model,list):
         
 #Function To Add battle cards to treeview data model
 def treeBattleCards(model,list):
-    for i in range(len(list)):
+    for i in range(len(list)-1,-1,-1):
         #Get First Card
         currentCard = list[i]
 
@@ -132,7 +132,7 @@ def treeBattleCards(model,list):
 
 #Function To Add stratagem cards to treeview data model (stratagem cards are not color coded)
 def treeStratagemCards(model,list):
-    for i in range(len(list)):
+    for i in range(len(list)-1,-1,-1):
         #Get First Card
         currentCard = list[i]
 
@@ -150,6 +150,7 @@ def treeStratagemCards(model,list):
 
     #return data model
     return model
+
 
 class CardView(QTreeView):
     #Widget must be a QtWidgets.Qwidget
@@ -172,7 +173,7 @@ class CardView(QTreeView):
         #add event listener for treeview when treeview is clicked
         self.clicked.connect(self.on_clicked)
 
-
+    #create the columns for the treeview
     def createDataModel(self,quantity = 2):
         #Set Column Headers
         model = QStandardItemModel(0, 2)
@@ -186,19 +187,20 @@ class CardView(QTreeView):
         #return data model
         return model
     
-    def addData(self,model,list):
+    #add the data from a list of cards to the treeview
+    def addData(self,model,cardList):
         #Add Data From List To Columns (if the given list contains any values)
-        if (len(list) > 0):
-            #Add Cards To Card List
-            self.cardData = list
+        if (len(cardList) > 0):
+            #Add Cards To Card List (This will be used when searching for the card data a row references)
+            self.cardData = cardList
             #Get First Card
-            currentCard = list[0]
+            currentCard = cardList[0]
 
             #Get Card Type
 
             #If Card Type reveals data to contain bot cards, set the data model accordingly
             if (currentCard.dataDict['cardType'] in ("Battle Master", "BotPiece", "Combiner", "TitanMaster Head", "TitanMaster Body", "Multiform", "Bot")):
-                model = treeBotCards(model,list)
+                model = treeBotCards(model,cardList)
 
                 #Set Column Width (Must Be Set After Adding Data)
                 #Set Name Column Width
@@ -208,7 +210,7 @@ class CardView(QTreeView):
 
             #If Card Type reveals data to contain battle cards, set the data model accordingly
             elif(currentCard.dataDict['cardType'] in ("Upgrade", "Action", "Secret Action")):
-                model = treeBattleCards(model,list)
+                model = treeBattleCards(model,cardList)
 
                 #Set Column Width (Must Be Set After Adding Data)
                 #Set Name Column Width
@@ -218,7 +220,7 @@ class CardView(QTreeView):
 
             #Otherwise Card Type must be a Stratagem, set the data model accordingly
             else:
-                model = treeStratagemCards(model,list)
+                model = treeStratagemCards(model,cardList)
 
                 #Set Column Width (Must Be Set After Adding Data)
 
@@ -231,17 +233,31 @@ class CardView(QTreeView):
     def on_clicked(self):
         #Get the list of Qmodels within the treeview
         selectedIndex = self.selectedIndexes()
-
-        #Initialize variables to store the items
-        selectionList = []
+        #initialize current row and item text
+        currentRow = None
+        text = " "
 
         #For the number of Qmodels get the items
         for i in range(len(selectedIndex)):
             #track where the index is currently
             currentIndex = selectedIndex[i]
-            #use the index to get the name, cost and image string from the selected item
+            #get the current row
+            currentRow = currentIndex.row()
+            #use the index to get the name, cost from the selected item (that has been printed to the treeview)
             item = self.model.itemFromIndex(currentIndex)
-            print(item.text())
+            #add selection to test
+            text += item.text() + " "
+        
+        #print results of selection (useful when debugging)
+        print("Selection Text:",text)
+        print("Selection Row:", currentRow)
+        print("Selection Image String:", self.cardData[currentRow].dataDict["path"])
+
+    
+
+
+            
+          
 
             
         
