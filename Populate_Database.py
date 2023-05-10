@@ -502,7 +502,7 @@ sql += "'Transport-City Defender'," #SubName
 sql += "'BotPiece'," #CardType
 sql += "7," #Cost
 sql += "'Autobot'," #Loyalty
-sql += "'./img/bot/omega_supreme_tank.jpg'" #Image Path
+sql += "'./img/bot/omega_supreme_spaceship.jpg'" #Image Path
 sql += ")"
 
 conn.execute(sql)
@@ -1377,11 +1377,11 @@ db.commit()
 sql = "INSERT INTO Bot(name,subName,cardType,cost,loyalty,path) VALUES"
 sql += "("
 sql += "'Tidal Wave'," #Name
-sql += "'Dark Fleet (Aircraft Carrier)'," #SubName
+sql += "'Dark Fleet (Transport)'," #SubName
 sql += "'BotPiece'," #CardType
 sql += "8," #Cost
 sql += "'Decepticon'," #Loyalty
-sql += "'./img/bot/tidal_wave_dark_fleet_aircraft_carrier.jpg'" #Path
+sql += "'./img/bot/tidal_wave_dark_fleet_transport.jpg'" #Path
 sql += ")"
 
 conn.execute(sql)

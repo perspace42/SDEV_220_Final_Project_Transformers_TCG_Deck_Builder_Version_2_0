@@ -317,12 +317,13 @@ class Ui_MainWindow(object):
         self.CardPreview.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.CardPreview.setObjectName("CardPreview")
         '''
-        self.SelectedBotCards = QtWidgets.QTreeView(self.centralwidget)
+        self.SelectedBotCards = CardView(self.centralwidget,self.CardPreview)
         self.SelectedBotCards.setGeometry(QtCore.QRect(326, 220, 241, 311))
         self.SelectedBotCards.setObjectName("SelectedBotCards")
-        self.SelectedBattleCards = QtWidgets.QTreeView(self.centralwidget)
+
+        self.SelectedBattleCards = CardView(self.centralwidget,self.CardPreview)
         self.SelectedBattleCards.setGeometry(QtCore.QRect(588, 220, 230, 441))
-        self.SelectedBattleCards.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+        self.SelectedBattleCards.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection) #what is the purpose of this line?
         self.SelectedBattleCards.setObjectName("SelectedBattleCards")
 
         # Create and configure the totals widget
@@ -344,7 +345,7 @@ class Ui_MainWindow(object):
         self.CardPreviewL.setObjectName("CardPreviewL")
 
         # Create and configure widget showing selected strategem cards
-        self.SelectedStrategemCards = QtWidgets.QTreeView(self.centralwidget)
+        self.SelectedStrategemCards = CardView(self.centralwidget,self.CardPreview)
         self.SelectedStrategemCards.setGeometry(QtCore.QRect(326, 551, 241, 110))
         self.SelectedStrategemCards.setObjectName("SelectedStrategemCards")
         self.SelectedStrategemCards_2 = QtWidgets.QLabel(self.centralwidget)

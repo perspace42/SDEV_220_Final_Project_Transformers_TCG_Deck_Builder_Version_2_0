@@ -169,14 +169,19 @@ class CardView(QTreeView):
         #add data storage container to treeview
         self.setModel(self.model)
 
+        #Create Preview and Search Items
         #initialize card data list to empty this list will store the cards currently shown within the treeview
         self.cardData = []
-
         #initialize card preview widget this will display the image of the last card selected within the treeview
         self.imageWidget = imageWidget
+        #initialize active tab widget this will determine which tab is active (and therefore)
 
+        #Create Event Listener Items
         #add event listener for treeview when treeview is clicked
         self.clicked.connect(self.on_clicked)
+        #add event listener for treeview when treeview is double clicked
+        self.doubleClicked.connect(self.on_double_clicked)
+
 
     #create the columns for the treeview
     def createDataModel(self,quantity = 2):
@@ -234,13 +239,13 @@ class CardView(QTreeView):
                 #Set Cost Column Width
                 self.setColumnWidth(1,5)
 
-    #event handler now prints currently selected card from treeview
+    #event handler now prints currently selected card from treeview and sends that cards image to the card preview section
     def on_clicked(self):
-        #Get the list of Qmodels within the treeview
+        #Get all of the indexes of all of the columns within the row
         selectedIndex = self.selectedIndexes()
         #initialize current row and item text
         currentRow = None
-        text = " "
+        text = ""
 
         #For the number of Qmodels get the items
         for i in range(len(selectedIndex)):
@@ -262,6 +267,10 @@ class CardView(QTreeView):
 
         #add image to image preview
         self.imageWidget.addImage(path)
+
+    #event handler for double clicking (add a card from card list to card selection)
+    def on_double_clicked(self):
+        pass
 
     
 
