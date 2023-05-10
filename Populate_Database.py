@@ -165,7 +165,7 @@ sql += "3," #Attack
 sql += "2," #Defense
 sql += "'(This occupies 1 Weapon slot and 1 Armor slot.) When the upgraded character battles -> Scrap this card after the battle.'," #Text
 sql += "0," #Cost
-sql += "'./img/battle/unleash_potential.jpg'" #Image File Path
+sql += "'./img/battle/crystal_of_power.jpg'" #Image File Path
 sql += ")"
 
 conn.execute(sql)

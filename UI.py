@@ -60,23 +60,22 @@ class Ui_MainWindow(object):
         self.Bot.setObjectName("Bot")
 
         #Create Card Preview Image Display Section
-        self.CardPreview = CardPreview(self.centralwidget)
-        self.CardPreview.setGeometry(QtCore.QRect(837, 220, 296, 471))
-        self.CardPreview.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
-        self.CardPreview.setObjectName("CardPreview")
+        self.CardPreviewSection = CardPreview(self.centralwidget)
+        self.CardPreviewSection.setGeometry(QtCore.QRect(837, 220, 296, 471))
+        self.CardPreviewSection.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.CardPreviewSection.setObjectName("CardPreview")
         
-        #NOTE TO SELF change self.BotCardList to a different name (to easy to confuse with botCardList {which is an actual list})
         #Added Custom CardView Class To Replace TreeView 
-        self.BotCardList = CardView(self.Bot,self.CardPreview)
+        self.BotCardTree = CardView(self.Bot,self.CardPreviewSection)
         #By default the quantity of the data model is set to 2
-        self.BotCardList.createDataModel()
-        self.BotCardList.addData(self.BotCardList.model,botCardList)
+        self.BotCardTree.createDataModel()
+        self.BotCardTree.addData(self.BotCardTree.model,botCardList)
         
 
         #Drawing The CardView (TreeView)
-        self.BotCardList.setGeometry(QtCore.QRect(0, 250, 313, 477))
-        self.BotCardList.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.BotCardList.setObjectName("BotCardList")
+        self.BotCardTree.setGeometry(QtCore.QRect(0, 250, 313, 477))
+        self.BotCardTree.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.BotCardTree.setObjectName("BotCardTree")
 
         # Set object names and geometry for the checkboxes, line edits, and labels
         # and create checkboxes
@@ -208,20 +207,19 @@ class Ui_MainWindow(object):
         self.BotTraitsSearch.addItem(item)
         self.CardsList.addTab(self.Bot, "")
 
-        #NOTE TO SELF change self.BattleCardList to a different name (to easy to confuse with battleCardList {which is an actual list})
         #Added Custom CardView Class To Replace TreeView 
         self.Battle = QtWidgets.QWidget()
         self.Battle.setObjectName("Battle")
         
-        self.BattleCardList = CardView(self.Battle,self.CardPreview)
+        self.BattleCardTree = CardView(self.Battle,self.CardPreviewSection)
         #By default the quantity of the data model is set to 2
-        self.BattleCardList.createDataModel()
-        self.BattleCardList.addData(self.BattleCardList.model,battleCardList)
+        self.BattleCardTree.createDataModel()
+        self.BattleCardTree.addData(self.BattleCardTree.model,battleCardList)
 
-        #add BattleCardList to window
-        self.BattleCardList.setGeometry(QtCore.QRect(0, 250, 313, 477))
-        self.BattleCardList.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.BattleCardList.setObjectName("BattleCardList")
+        #add BattleCardTree to window
+        self.BattleCardTree.setGeometry(QtCore.QRect(0, 250, 313, 477))
+        self.BattleCardTree.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.BattleCardTree.setObjectName("BattleCardTree")
 
         # Battle search creation and parameters, with labels
         self.BattleNameSearch = QtWidgets.QLineEdit(self.Battle)
@@ -276,20 +274,19 @@ class Ui_MainWindow(object):
         self.CardsList.addTab(self.Battle, "")
 
         # Create and configure the strategem tab
-        #NOTE TO SELF change self.StrategemCardList to a different name (to easy to confuse with stratagemCardList {which is an actual list})
         #Added Custom CardView Class To Replace TreeView 
         self.Strategem = QtWidgets.QWidget()
         self.Strategem.setObjectName("Strategem")
         
-        self.StrategemCardList = CardView(self.Strategem,self.CardPreview)
+        self.StrategemCardTree = CardView(self.Strategem,self.CardPreviewSection)
         #By default the quantity of the data model is set to 2
-        self.StrategemCardList.createDataModel()
-        self.StrategemCardList.addData(self.StrategemCardList.model, stratagemCardList)
+        self.StrategemCardTree.createDataModel()
+        self.StrategemCardTree.addData(self.StrategemCardTree.model, stratagemCardList)
 
-        #add StrategemCardList to window
-        self.StrategemCardList.setGeometry(QtCore.QRect(0, 250, 313, 477))
-        self.StrategemCardList.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.StrategemCardList.setObjectName("StrategemCardList")
+        #add StrategemCardTree to window
+        self.StrategemCardTree.setGeometry(QtCore.QRect(0, 250, 313, 477))
+        self.StrategemCardTree.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.StrategemCardTree.setObjectName("StrategemCardTree")
 
         # Strategem search creation and parameters, with labels
         self.StrategemNameSearch = QtWidgets.QLineEdit(self.Strategem)
@@ -309,22 +306,23 @@ class Ui_MainWindow(object):
         self.StrategemSearchButton.setObjectName("StrategemSearchButton")
         self.CardsList.addTab(self.Strategem, "")
 
-        # Create and configure the graphics widget to show currently selected card
-        '''
-        This has been commented out to move the CardPreview Section so it can be used as a Parameter
-        self.CardPreview = QtWidgets.QGraphicsView(self.centralwidget)
-        self.CardPreview.setGeometry(QtCore.QRect(837, 220, 296, 471))
-        self.CardPreview.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
-        self.CardPreview.setObjectName("CardPreview")
-        '''
-        self.SelectedBotCards = CardView(self.centralwidget,self.CardPreview)
+        #configure the section where selected bot and battle cards are placed
+        self.SelectedBotCards = CardView(self.centralwidget,self.CardPreviewSection)
         self.SelectedBotCards.setGeometry(QtCore.QRect(326, 220, 241, 311))
         self.SelectedBotCards.setObjectName("SelectedBotCards")
 
-        self.SelectedBattleCards = CardView(self.centralwidget,self.CardPreview)
+        self.SelectedBattleCards = CardView(self.centralwidget,self.CardPreviewSection)
+        #add the quantity column to the selected battle cards CardView (by changing the model to include a third column)
+        self.SelectedBattleCards.model = self.SelectedBattleCards.createDataModel(3)
+        #set the model that has just been added
+        self.SelectedBattleCards.setModel(self.SelectedBattleCards.model)
+
         self.SelectedBattleCards.setGeometry(QtCore.QRect(588, 220, 230, 441))
-        self.SelectedBattleCards.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection) #what is the purpose of this line?
         self.SelectedBattleCards.setObjectName("SelectedBattleCards")
+
+
+
+        self.SelectedBattleCards.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection) #what is the purpose of this line Ashton?
 
         # Create and configure the totals widget
         self.Totals = QtWidgets.QTreeView(self.centralwidget)
@@ -345,7 +343,7 @@ class Ui_MainWindow(object):
         self.CardPreviewL.setObjectName("CardPreviewL")
 
         # Create and configure widget showing selected strategem cards
-        self.SelectedStrategemCards = CardView(self.centralwidget,self.CardPreview)
+        self.SelectedStrategemCards = CardView(self.centralwidget,self.CardPreviewSection)
         self.SelectedStrategemCards.setGeometry(QtCore.QRect(326, 551, 241, 110))
         self.SelectedStrategemCards.setObjectName("SelectedStrategemCards")
         self.SelectedStrategemCards_2 = QtWidgets.QLabel(self.centralwidget)

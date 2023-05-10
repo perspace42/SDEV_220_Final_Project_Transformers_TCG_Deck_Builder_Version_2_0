@@ -174,7 +174,8 @@ class CardView(QTreeView):
         self.cardData = []
         #initialize card preview widget this will display the image of the last card selected within the treeview
         self.imageWidget = imageWidget
-        #initialize active tab widget this will determine which tab is active (and therefore)
+        #initialize current row index (This will store the row that was last selected)
+        self.currentRow = 999 #if 999 shows up as current row then their is a logic error somewhere
 
         #Create Event Listener Items
         #add event listener for treeview when treeview is clicked
@@ -184,14 +185,18 @@ class CardView(QTreeView):
 
 
     #create the columns for the treeview
-    def createDataModel(self,quantity = 2):
+    def createDataModel(self,numColumns = 2):
         #Set Column Headers
+        #QStandardItemModel will not accept a variable as a parameter only a constant
         model = QStandardItemModel(0, 2)
         model.setHeaderData(0, Qt.Horizontal, "Name")
         model.setHeaderData(1, Qt.Horizontal, "Cost")
 
         #If there is need for a third column, add it
-        if (quantity == 3):
+        if (numColumns == 3):
+            model = QStandardItemModel(0, 3)
+            model.setHeaderData(0, Qt.Horizontal, "Name")
+            model.setHeaderData(1, Qt.Horizontal, "Cost")
             model.setHeaderData(2,Qt.Horizontal, "Quantity")
         
         #return data model
@@ -244,7 +249,6 @@ class CardView(QTreeView):
         #Get all of the indexes of all of the columns within the row
         selectedIndex = self.selectedIndexes()
         #initialize current row and item text
-        currentRow = None
         text = ""
 
         #For the number of Qmodels get the items
@@ -252,17 +256,17 @@ class CardView(QTreeView):
             #track where the index is currently
             currentIndex = selectedIndex[i]
             #get the current row
-            currentRow = currentIndex.row()
+            self.currentRow = currentIndex.row()
             #use the index to get the name, cost from the selected item (that has been printed to the treeview)
             item = self.model.itemFromIndex(currentIndex)
             #add selection to test
             text += item.text() + " "
         
-        path = self.cardData[currentRow].dataDict["path"]
+        path = self.cardData[self.currentRow].dataDict["path"]
         #print results of selection (useful when debugging)
         print("\nNEW SELECTION\n")
         print("Selection Text:",text)
-        print("Selection Row:", currentRow)
+        print("Selection Row:", self.currentRow)
         print("Selection Image String:", path)
 
         #add image to image preview
@@ -270,8 +274,23 @@ class CardView(QTreeView):
 
     #event handler for double clicking (add a card from card list to card selection)
     def on_double_clicked(self):
-        pass
+        print("double clicked")
+        #using current row, get selected card data
 
+        #using selected card data determine which card selection section to add the card too
+
+        #read cards currently in card selection section
+
+        #if card type is not battle (not Action, Secret Action, Upgrade) and the card to be added is already in the card selection sectiom
+            #exit without adding the card
+        #else if card is battle
+            #if quantity of card is <=2
+                #add the card
+            #else
+                #exit without adding the card
+
+        
+        
     
 
 
