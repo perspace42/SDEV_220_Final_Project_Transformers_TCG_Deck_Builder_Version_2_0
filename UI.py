@@ -324,6 +324,7 @@ class Ui_MainWindow(object):
 
 
         self.SelectedBattleCards.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection) #what is the purpose of this line Ashton?
+        # The above line confines the user to only have one battle card selected at any given time, to make the card display work properly.
 
         # Create and configure the totals widget
         self.Totals = QtWidgets.QTreeView(self.centralwidget)
