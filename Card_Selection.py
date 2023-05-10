@@ -156,9 +156,9 @@ def treeStratagemCards(model,list):
 class CardView(QTreeView):
     #Parent Widget must be a QtWidgets.Qwidget
     #Image Widget must be a QGraphicsScene Widget
-    def __init__(self,parentWidget,imageWidget):
+    #Target Widget is the location of where to add cards after are added after being double clicked (default is None)
+    def __init__(self,parentWidget,imageWidget,targetWidget = None):
         super().__init__(parentWidget)
-
         #Create Treeview Items
         #remove left tab space from treeview
         self.setRootIsDecorated(False)
