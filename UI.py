@@ -25,9 +25,8 @@
 # self.BotTraitsL.setObjectName("BotTraitsL")
 
 # The sections from top to bottom, contain the object widget, location on screen, and name.
-
-
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QVBoxLayout, QWidget
 #import the custom treeview
 from Card_Selection import *
 
@@ -61,7 +60,9 @@ class Ui_MainWindow(object):
 
         #Create Card Preview Image Display Section
         self.CardPreviewSection = CardPreview(self.centralwidget)
-        self.CardPreviewSection.setGeometry(QtCore.QRect(837, 220, 296, 471))
+        
+        #The Dimensions Of This Section Have Been Fixed It Just Needs To Be Moved Farther Right
+        self.CardPreviewSection.setGeometry(QtCore.QRect(837, 20, 805, 950))
         self.CardPreviewSection.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.CardPreviewSection.setObjectName("CardPreview")
         
@@ -339,7 +340,7 @@ class Ui_MainWindow(object):
         self.SelectedBattleCardsL.setGeometry(QtCore.QRect(590, 200, 231, 20))
         self.SelectedBattleCardsL.setObjectName("SelectedBattleCardsL")
         self.CardPreviewL = QtWidgets.QLabel(self.centralwidget)
-        self.CardPreviewL.setGeometry(QtCore.QRect(840, 200, 231, 20))
+        self.CardPreviewL.setGeometry(QtCore.QRect(840, 0, 231, 20))
         self.CardPreviewL.setObjectName("CardPreviewL")
 
         # Create and configure widget showing selected strategem cards
@@ -378,9 +379,11 @@ class Ui_MainWindow(object):
         self.menuFile.addAction(self.actionExit)
         self.menubar.addAction(self.menuFile.menuAction())
 
+        #Add UI labels to UI
         self.retranslateUi(MainWindow)
         self.CardsList.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
 
     # Sets text and labels for UI
     def retranslateUi(self, MainWindow):
@@ -489,14 +492,18 @@ class Ui_MainWindow(object):
         self.actionSave_As.setText(_translate("MainWindow", "Save As"))
         self.actionNew.setText(_translate("MainWindow", "New"))
         self.actionExit.setText(_translate("MainWindow", "Exit"))
-        self.actionClose.setText(_translate("MainWindow", "Close"))
-
+        self.actionClose.setText(_translate("MainWindow", "Close"))       
 
 if __name__ == "__main__":
     import sys
+    #initialize application
     app = QtWidgets.QApplication(sys.argv)
+    #setup main window
     MainWindow = QtWidgets.QMainWindow()
+    #setup user interface
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
-    MainWindow.show()
+    #show main window
+    MainWindow.showMaximized()
+    #close app on exit
     sys.exit(app.exec_())
