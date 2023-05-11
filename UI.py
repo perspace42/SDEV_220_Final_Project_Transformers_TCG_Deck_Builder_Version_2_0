@@ -7,7 +7,7 @@
 # WARNING: Any manual changes made to this file will be lost if pyuic5 is
 # run again.  Do not run pyuic again, at this stage in the project we need to be editing this file manually
 
-# Authors: Ashton Wood, Scott Field
+# Original Authors: Ashton Wood, Scott Field
 
 # editors note: the widgets are oranized to have the configuration above the self.centralwidget.setObjectName line.
 # The following widgets would be separated in this fashion
@@ -29,6 +29,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QVBoxLayout, QWidget
 #import the custom treeview
 from Card_Selection import *
+from Card_Removal import *
 
 
 class Ui_MainWindow(object):
@@ -308,7 +309,7 @@ class Ui_MainWindow(object):
         self.CardsList.addTab(self.Strategem, "")
 
         #configure the section where selected bot and battle cards are placed
-        self.SelectedBotCards = CardView(self.centralwidget,self.CardPreviewSection)
+        self.SelectedBotCards = CardSelect(self.centralwidget,self.CardPreviewSection)
         self.SelectedBotCards.setGeometry(QtCore.QRect(326, 220, 241, 311))
         self.SelectedBotCards.setObjectName("SelectedBotCards")
 
@@ -316,7 +317,7 @@ class Ui_MainWindow(object):
         self.BotCardTree.setTarget(self.SelectedBotCards)
         self.SelectedBotCards.setTarget(self.SelectedBotCards)
 
-        self.SelectedBattleCards = CardView(self.centralwidget,self.CardPreviewSection)
+        self.SelectedBattleCards = CardSelect(self.centralwidget,self.CardPreviewSection)
         #add the quantity column to the selected battle cards CardView (by changing the model to include a third column)
         self.SelectedBattleCards.model = self.SelectedBattleCards.createDataModel(3)
         #set the model that has just been added
@@ -332,7 +333,7 @@ class Ui_MainWindow(object):
         self.SelectedBattleCards.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection) #what is the purpose of this line Ashton?
 
         # Create and configure widget showing selected strategem cards
-        self.SelectedStrategemCards = CardView(self.centralwidget,self.CardPreviewSection)
+        self.SelectedStrategemCards = CardSelect(self.centralwidget,self.CardPreviewSection)
         self.SelectedStrategemCards.setGeometry(QtCore.QRect(326, 551, 241, 110))
         self.SelectedStrategemCards.setObjectName("SelectedStrategemCards")
 

@@ -1,18 +1,19 @@
 '''
 Author: Scott
-Version: 2.1
+Version: 3.0
 Name: Card_Selection
-Date: 05/07/2023
+Date: 05/10/2023
 Purpose: Create a CardView class to add a Treeview for viewing cards to be added to the UI.py file
 '''
-from PyQt5.QtCore import Qt
+from PyQt5 import QtGui
+from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QStandardItemModel, QBrush, QColor
 from PyQt5.QtWidgets import  QTreeView, QAbstractItemView
 
 from Read_Database import *
 from Card_Preview import *
 
-#NOTE These three functions (while functional) need to be optimized as alot of their code can be eliminated due to the programs updated structure
+#NOTE These three functions (while functional) need to be optimized as alot of their code can be eliminated due to the Card_Selection.py files updated structure
 
 #Function To Add bot cards to treeview data model
 def treeBotCards(model,list):
@@ -184,12 +185,6 @@ class CardView(QTreeView):
         #initialize variable to store type of cards in treeview (Bot,Battle,Strategem)
         self.type = None
 
-        #Create Event Listener Items
-        #add event listener for treeview when treeview is clicked
-        self.clicked.connect(self.on_clicked)
-        #add event listener for treeview when treeview is double clicked
-        self.doubleClicked.connect(self.on_double_clicked)
-
 
     #create the columns for the treeview
     def createDataModel(self,numColumns = 2):
@@ -345,82 +340,83 @@ class CardView(QTreeView):
             #Add Color To Quantity Column
             self.model.setData(self.model.index(0, 2), QBrush(QColor(r,g,b)), Qt.BackgroundRole)
 
-
-
-
-
-    #event handler now prints currently selected card from treeview and sends that cards image to the card preview section
-    def on_clicked(self):
-        #Get all of the indexes of all of the columns within the row
-        selectedIndex = self.selectedIndexes()
-        #initialize current row and item text
-        text = ""
-
-        #For the number of Qmodels get the items
-        for i in range(len(selectedIndex)):
-            #track where the index is currently
-            currentIndex = selectedIndex[i]
-            #get the current row
-            self.currentRow = currentIndex.row()
-            #use the index to get the name, cost from the selected item (that has been printed to the treeview)
-            item = self.model.itemFromIndex(currentIndex)
-            #add selection to test
-            text += item.text() + " "
-        
-        path = self.cardData[self.currentRow].dataDict["path"]
-        #print results of selection (useful when debugging)
-        print("\nNEW SELECTION\n")
-        print("Selection Text:",text)
-        print("Selection Row:", self.currentRow)
-        print("Selection Image String:", path)
-
-        #add image to image preview
-        self.imageWidget.addImage(path)
-
     #method for setting which treeview cards should be added to
     def setTarget(self,CardSelectionTree):
         self.target = CardSelectionTree
         #set types to be equal
         CardSelectionTree.type = self.type
 
+    #Output the signals
+    def mousePressEvent(self,event):
+        #override the default event behavior
+        super().mousePressEvent(event)
+        #If the left mouse button is pressed and it has selected an row add the card image to the card preview section
+        if (event.button() == Qt.LeftButton and self.selectedIndexes()):
+            #Get all of the indexes of all of the columns within the row
+            selectedIndex = self.selectedIndexes()
+            #initialize current row and item text
+            text = ""
 
-    #event handler for double clicking (add a card from card list to card selection)
-    def on_double_clicked(self):
-        print("double click result:")
-        #using current row, get selected card data
-        selectedCard = self.cardData[self.currentRow]
+            #For the number of Qmodels get the items
+            for i in range(len(selectedIndex)):
+                #track where the index is currently
+                currentIndex = selectedIndex[i]
+                #get the current row
+                self.currentRow = currentIndex.row()
+                #use the index to get the name, cost from the selected item (that has been printed to the treeview)
+                item = self.model.itemFromIndex(currentIndex)
+                #add selection to test
+                text += item.text() + " "
+            
+            path = self.cardData[self.currentRow].dataDict["path"]
+            #print results of selection (useful when debugging)
+            print("\nNEW SELECTION\n")
+            print("Selection Text:",text)
+            print("Selection Row:", self.currentRow)
+            print("Selection Image String:", path)
 
-        #Check if the card is already in the selection CardView
-        if (selectedCard in (self.target.cardData)):
-            print("Card is a duplicate")
-            #If the card to be added to the deck is a Battle Card (Action, Secret Action, Upgrade)
-            if (self.target.type == "Battle"):
-                #find the location of the card (the location in the parallel list will be identical to the row in the treeview)
-                cardLocation = self.target.cardData.index(selectedCard)
-                #using the cards location and the quantity column (2) pull the quantity from the treeview
-                dataIndex = (self.target.model.index(cardLocation,2))
-                quantity = int(self.target.model.data(dataIndex,Qt.DisplayRole))
-                #by rule only 3 of the same battle card are allowed in the same deck, this enforces that constraint
-                if (quantity < 3):
-                    #increment quantity
-                    quantity += 1
-                    #add new quantity to treeview
-                    self.target.model.setData(dataIndex, quantity)
-                    print("The Quantity of: " + selectedCard.dataDict['name'] + " is now ", quantity)
+            #add image to image preview
+            self.imageWidget.addImage(path)
+            
+
+    def mouseDoubleClickEvent(self,event):
+        #override the default event behavior
+        super().mouseDoubleClickEvent(event)
+        #If the left mouse button is pressed and it has selected an row add the card to the selection area
+        if (event.button() == Qt.LeftButton and self.selectedIndexes()):
+            print("double click result:")
+            #using current row, get selected card data
+            selectedCard = self.cardData[self.currentRow]
+
+            #Check if the card is already in the selection CardView
+            if (selectedCard in (self.target.cardData)):
+                print("Card is a duplicate")
+                #If the card to be added to the deck is a Battle Card (Action, Secret Action, Upgrade)
+                if (self.target.type == "Battle"):
+                    #find the location of the card (the location in the parallel list will be identical to the row in the treeview)
+                    cardLocation = self.target.cardData.index(selectedCard)
+                    #using the cards location and the quantity column (2) pull the quantity from the treeview
+                    dataIndex = (self.target.model.index(cardLocation,2))
+                    quantity = int(self.target.model.data(dataIndex,Qt.DisplayRole))
+                    #by rule only 3 of the same battle card are allowed in the same deck, this enforces that constraint
+                    if (quantity < 3):
+                        #increment quantity
+                        quantity += 1
+                        #add new quantity to treeview
+                        self.target.model.setData(dataIndex, quantity)
+                        print("The Quantity of: " + selectedCard.dataDict['name'] + " is now ", quantity)
+                    else:
+                        print("Three copies of ",selectedCard.dataDict['name'], " have already been added to the deck")
+
+                #if the card is not a battle card, than duplicate cards cannot be added
                 else:
-                    print("Three copies of ",selectedCard.dataDict['name'], " have already been added to the deck")
+                    print("Duplicate Bot or Stratagem Cards Cannot Be Added")
 
-                print("Check Quantity, then if < 3 add 1 card")
-            #if the card is not a battle card, than duplicate cards cannot be added
+            #If the card has not been added yet, add it to its proper selection section
             else:
-                print("Duplicate Bot or Stratagem Cards Cannot Be Added")
-
-        #If the card has not been added yet, add it to its proper selection section
-        else:
-            print("Adding: " + selectedCard.dataDict['name'] + "To the deck")
-            #Add the card to the treeview
-            self.target.addCard(selectedCard)
-
+                print("Adding: " + selectedCard.dataDict['name'] + "To the deck")
+                #Add the card to the treeview
+                self.target.addCard(selectedCard)
         
         
     
