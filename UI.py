@@ -7,7 +7,7 @@
 # WARNING: Any manual changes made to this file will be lost if pyuic5 is
 # run again.  Do not run pyuic again, at this stage in the project we need to be editing this file manually
 
-# Original Authors: Ashton Wood, Scott Field
+# Authors: Ashton Wood, Scott Field
 
 # editors note: the widgets are oranized to have the configuration above the self.centralwidget.setObjectName line.
 # The following widgets would be separated in this fashion
@@ -25,11 +25,12 @@
 # self.BotTraitsL.setObjectName("BotTraitsL")
 
 # The sections from top to bottom, contain the object widget, location on screen, and name.
+
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QVBoxLayout, QWidget
 #import the custom treeview
 from Card_Selection import *
-from Card_Removal import *
 
 
 class Ui_MainWindow(object):
@@ -82,13 +83,13 @@ class Ui_MainWindow(object):
         # Set object names and geometry for the checkboxes, line edits, and labels
         # and create checkboxes
         self.DecepticonCheckbox = QtWidgets.QCheckBox(self.Bot)
-        self.DecepticonCheckbox.setGeometry(QtCore.QRect(230, 90, 81, 31))
+        self.DecepticonCheckbox.setGeometry(QtCore.QRect(220, 90, 81, 31))
         self.DecepticonCheckbox.setObjectName("DecepticonCheckbox")
         self.MercenaryCheckbox = QtWidgets.QCheckBox(self.Bot)
-        self.MercenaryCheckbox.setGeometry(QtCore.QRect(230, 60, 81, 31))
+        self.MercenaryCheckbox.setGeometry(QtCore.QRect(220, 60, 81, 31))
         self.MercenaryCheckbox.setObjectName("MercenaryCheckbox")
         self.AutobotCheckbox = QtWidgets.QCheckBox(self.Bot)
-        self.AutobotCheckbox.setGeometry(QtCore.QRect(230, 30, 81, 31))
+        self.AutobotCheckbox.setGeometry(QtCore.QRect(220, 30, 81, 31))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -165,7 +166,8 @@ class Ui_MainWindow(object):
 
         # Bot traits setup and paramters
         self.BotTraitsSearch = QtWidgets.QListWidget(self.Bot)
-        self.BotTraitsSearch.setGeometry(QtCore.QRect(80, 160, 141, 21))
+        self.BotTraitsSearch.setGeometry(QtCore.QRect(80, 160, 141, 31))
+        self.BotTraitsSearch.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.BotTraitsSearch.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.BotTraitsSearch.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectItems)
         self.BotTraitsSearch.setObjectName("BotTraitsSearch")
@@ -256,23 +258,24 @@ class Ui_MainWindow(object):
         self.BattleIconL = QtWidgets.QLabel(self.Battle)
         self.BattleIconL.setGeometry(QtCore.QRect(20, 150, 47, 13))
         self.BattleIconL.setObjectName("BattleIconL")
-        self.listWidget = QtWidgets.QListWidget(self.Battle)
-        self.listWidget.setGeometry(QtCore.QRect(80, 150, 141, 21))
-        self.listWidget.setAutoScroll(False)
-        self.listWidget.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
-        self.listWidget.setObjectName("listWidget")
+        self.BattleIcon = QtWidgets.QListWidget(self.Battle)
+        self.BattleIcon.setGeometry(QtCore.QRect(80, 150, 141, 31))
+        self.BattleIcon.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.BattleIcon.setAutoScroll(False)
+        self.BattleIcon.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
+        self.BattleIcon.setObjectName("BattleIcon")
         item = QtWidgets.QListWidgetItem()
-        self.listWidget.addItem(item)
+        self.BattleIcon.addItem(item)
         item = QtWidgets.QListWidgetItem()
-        self.listWidget.addItem(item)
+        self.BattleIcon.addItem(item)
         item = QtWidgets.QListWidgetItem()
-        self.listWidget.addItem(item)
+        self.BattleIcon.addItem(item)
         item = QtWidgets.QListWidgetItem()
-        self.listWidget.addItem(item)
+        self.BattleIcon.addItem(item)
         item = QtWidgets.QListWidgetItem()
-        self.listWidget.addItem(item)
+        self.BattleIcon.addItem(item)
         item = QtWidgets.QListWidgetItem()
-        self.listWidget.addItem(item)
+        self.BattleIcon.addItem(item)
         self.CardsList.addTab(self.Battle, "")
 
         # Create and configure the strategem tab
@@ -308,16 +311,17 @@ class Ui_MainWindow(object):
         self.StrategemSearchButton.setObjectName("StrategemSearchButton")
         self.CardsList.addTab(self.Strategem, "")
 
+        # Strategem search functionality
+        def StrategemNameSearch(self):
+            self.StrategemNameSearch(self)
+            print(self.StrategemNameSearch.text())
+
         #configure the section where selected bot and battle cards are placed
-        self.SelectedBotCards = CardSelect(self.centralwidget,self.CardPreviewSection)
+        self.SelectedBotCards = CardView(self.centralwidget,self.CardPreviewSection)
         self.SelectedBotCards.setGeometry(QtCore.QRect(326, 220, 241, 311))
         self.SelectedBotCards.setObjectName("SelectedBotCards")
 
-        #Set Both CardViews To Add selected Card To SelectedBotCards when double clicked
-        self.BotCardTree.setTarget(self.SelectedBotCards)
-        self.SelectedBotCards.setTarget(self.SelectedBotCards)
-
-        self.SelectedBattleCards = CardSelect(self.centralwidget,self.CardPreviewSection)
+        self.SelectedBattleCards = CardView(self.centralwidget,self.CardPreviewSection)
         #add the quantity column to the selected battle cards CardView (by changing the model to include a third column)
         self.SelectedBattleCards.model = self.SelectedBattleCards.createDataModel(3)
         #set the model that has just been added
@@ -326,21 +330,10 @@ class Ui_MainWindow(object):
         self.SelectedBattleCards.setGeometry(QtCore.QRect(588, 220, 230, 441))
         self.SelectedBattleCards.setObjectName("SelectedBattleCards")
 
-        #Set Both CardViews To Add selected Card to SelectedBattleCards when double clicked
-        self.BattleCardTree.setTarget(self.SelectedBattleCards)
-        self.SelectedBattleCards.setTarget(self.SelectedBattleCards)
+
 
         self.SelectedBattleCards.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection) #what is the purpose of this line Ashton?
         # The above line confines the user to only have one battle card selected at any given time, to make the card display work properly.
-
-        # Create and configure widget showing selected strategem cards
-        self.SelectedStrategemCards = CardSelect(self.centralwidget,self.CardPreviewSection)
-        self.SelectedStrategemCards.setGeometry(QtCore.QRect(326, 551, 241, 110))
-        self.SelectedStrategemCards.setObjectName("SelectedStrategemCards")
-
-        #Set Both CardViews To Add selected Card to SelectedStrategemCards when double clicked
-        self.StrategemCardTree.setTarget(self.SelectedStrategemCards)
-        self.SelectedStrategemCards.setTarget(self.SelectedStrategemCards)
 
         # Create and configure the totals widget
         self.Totals = QtWidgets.QTreeView(self.centralwidget)
@@ -360,8 +353,10 @@ class Ui_MainWindow(object):
         self.CardPreviewL.setGeometry(QtCore.QRect(840, 0, 231, 20))
         self.CardPreviewL.setObjectName("CardPreviewL")
 
-        #Add A Label to the Selected Stratagem Cards Section
-        #NOTE this needs be renamed as adding a _2 to the end of a variable is a terrible practice
+        # Create and configure widget showing selected strategem cards
+        self.SelectedStrategemCards = CardView(self.centralwidget,self.CardPreviewSection)
+        self.SelectedStrategemCards.setGeometry(QtCore.QRect(326, 551, 241, 110))
+        self.SelectedStrategemCards.setObjectName("SelectedStrategemCards")
         self.SelectedStrategemCards_2 = QtWidgets.QLabel(self.centralwidget)
         self.SelectedStrategemCards_2.setGeometry(QtCore.QRect(326, 532, 231, 16))
         self.SelectedStrategemCards_2.setObjectName("SelectedStrategemCardsL")
@@ -406,7 +401,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.CardsList.setToolTip(_translate("MainWindow", "<html><head/><body><p>Battle Cards</p></body></html>"))
         self.DecepticonCheckbox.setText(_translate("MainWindow", "Decepticons"))
-        self.MercenaryCheckbox.setText(_translate("MainWindow", "Mercenaries"))
+        self.MercenaryCheckbox.setText(_translate("MainWindow", "Mercenary"))
         self.AutobotCheckbox.setText(_translate("MainWindow", "AutoBots"))
         self.BotNameL.setText(_translate("MainWindow", "Name:"))
         self.BotSideNameL.setText(_translate("MainWindow", "SideName:"))
@@ -478,21 +473,21 @@ class Ui_MainWindow(object):
         self.BattleTypeSearch.setItemText(6, _translate("MainWindow", "Upgrade - Utility"))
         self.BattleSearchButton.setText(_translate("MainWindow", "Search"))
         self.BattleIconL.setText(_translate("MainWindow", "Icon:"))
-        __sortingEnabled = self.listWidget.isSortingEnabled()
-        self.listWidget.setSortingEnabled(False)
-        item = self.listWidget.item(0)
+        __sortingEnabled = self.BattleIcon.isSortingEnabled()
+        self.BattleIcon.setSortingEnabled(False)
+        item = self.BattleIcon.item(0)
         item.setText(_translate("MainWindow", "no icon"))
-        item = self.listWidget.item(1)
+        item = self.BattleIcon.item(1)
         item.setText(_translate("MainWindow", "blue"))
-        item = self.listWidget.item(2)
+        item = self.BattleIcon.item(2)
         item.setText(_translate("MainWindow", "orange"))
-        item = self.listWidget.item(3)
+        item = self.BattleIcon.item(3)
         item.setText(_translate("MainWindow", "white"))
-        item = self.listWidget.item(4)
+        item = self.BattleIcon.item(4)
         item.setText(_translate("MainWindow", "green"))
-        item = self.listWidget.item(5)
+        item = self.BattleIcon.item(5)
         item.setText(_translate("MainWindow", "black"))
-        self.listWidget.setSortingEnabled(__sortingEnabled)
+        self.BattleIcon.setSortingEnabled(__sortingEnabled)
         self.CardsList.setTabText(self.CardsList.indexOf(self.Battle), _translate("MainWindow", "Battle"))
         self.StrategemNameL.setText(_translate("MainWindow", "Name:"))
         self.CardTextL.setText(_translate("MainWindow", "Card Text:"))
