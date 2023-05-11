@@ -353,20 +353,15 @@ class CardView(QTreeView):
         #If the left mouse button is pressed and it has selected an row add the card image to the card preview section
         if (event.button() == Qt.LeftButton and self.selectedIndexes()):
             #Get all of the indexes of all of the columns within the row
-            selectedIndex = self.selectedIndexes()
+            selectedIndex = self.currentIndex()
             #initialize current row and item text
             text = ""
-
-            #For the number of Qmodels get the items
-            for i in range(len(selectedIndex)):
-                #track where the index is currently
-                currentIndex = selectedIndex[i]
-                #get the current row
-                self.currentRow = currentIndex.row()
-                #use the index to get the name, cost from the selected item (that has been printed to the treeview)
-                item = self.model.itemFromIndex(currentIndex)
-                #add selection to test
-                text += item.text() + " "
+            #get the current row
+            self.currentRow = selectedIndex.row()
+            #use the index to get the name, cost from the selected item (that has been printed to the treeview)
+            item = self.model.itemFromIndex(selectedIndex)
+            #add selection to test
+            text += item.text() + " "
             
             path = self.cardData[self.currentRow].dataDict["path"]
             #print results of selection (useful when debugging)
@@ -414,7 +409,7 @@ class CardView(QTreeView):
 
             #If the card has not been added yet, add it to its proper selection section
             else:
-                print("Adding: " + selectedCard.dataDict['name'] + "To the deck")
+                print("Adding: " + selectedCard.dataDict['name'] + " To the deck")
                 #Add the card to the treeview
                 self.target.addCard(selectedCard)
         

@@ -26,20 +26,15 @@ class CardSelect(CardView):
         #If the left mouse button is pressed and it has selected an row add the card image to the card preview section
         if (event.button() == Qt.LeftButton and self.selectedIndexes()):
             #Get all of the indexes of all of the columns within the row
-            selectedIndex = self.selectedIndexes()
+            selectedIndex = self.currentIndex()
             #initialize current row and item text
             text = ""
-
-            #For the number of Qmodels get the items
-            for i in range(len(selectedIndex)):
-                #track where the index is currently
-                currentIndex = selectedIndex[i]
-                #get the current row
-                self.currentRow = currentIndex.row()
-                #use the index to get the name, cost from the selected item (that has been printed to the treeview)
-                item = self.model.itemFromIndex(currentIndex)
-                #add selection to test
-                text += item.text() + " "
+            #get the current row
+            self.currentRow = selectedIndex.row()
+            #use the index to get the name, cost from the selected item (that has been printed to the treeview)
+            item = self.model.itemFromIndex(selectedIndex)
+            #add selection to test
+            text += item.text() + " "
             
             path = self.cardData[self.currentRow].dataDict["path"]
             #print results of selection (useful when debugging)
@@ -53,7 +48,44 @@ class CardSelect(CardView):
         
         #If the right mouse button is pressed and it has selected an row remove that row from the CardSelect
         if (event.button() == Qt.RightButton and self.selectedIndexes()):
-            print("Removing A Card")
+            #Remove the row From The Treeview, if the type isn't battle (and therefore there is not quantity tab)
+            selectedIndex = self.currentIndex()
+            self.currentRow = selectedIndex.row()
+
+            print ("Removing: ",self.cardData[self.currentRow].dataDict['name'], " from the deck")
+
+            if (self.type != "Battle"):
+                self.model.removeRow(self.currentRow,self.currentIndex().parent())
+                #Remove the Card From The Parallel List
+                self.cardData.pop(self.currentRow)
+
+            #If the card type is battle check quantity before removing
+            else:
+                #using the cards current row and the quantity column (2) pull the quantity from the treeview
+                dataIndex = (self.model.index(self.currentRow,2))
+                quantity = int(self.model.data(dataIndex,Qt.DisplayRole))
+                if (quantity > 1):
+                        #increment quantity
+                        quantity -= 1
+                        #add new quantity to treeview
+                        self.target.model.setData(dataIndex, quantity)
+                #if the quantity is 1 then simply remove the card
+                else:
+                    #Remove the Row from the Treeview
+                    selectedIndex = self.currentIndex()
+                    self.currentRow = selectedIndex.row()
+
+                    self.model.removeRow(self.currentRow,self.currentIndex().parent())
+
+                    #Remove the Card From The Parallel List
+                    self.cardData.pop(self.currentRow)
+
+            
+                     
+
+                
+            
+
 
     
 

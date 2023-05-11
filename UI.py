@@ -7,7 +7,8 @@
 # WARNING: Any manual changes made to this file will be lost if pyuic5 is
 # run again.  Do not run pyuic again, at this stage in the project we need to be editing this file manually
 
-# Original Authors: Ashton Wood, Scott Field
+# Original Author: Ashton Wood
+# Fixed By: Scott Field
 
 # editors note: the widgets are oranized to have the configuration above the self.centralwidget.setObjectName line.
 # The following widgets would be separated in this fashion
