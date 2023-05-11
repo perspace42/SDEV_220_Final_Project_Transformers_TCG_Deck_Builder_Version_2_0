@@ -1,16 +1,19 @@
 '''
 Author: Scott
-Version: 2.1
+Version: 3.0
 Name: Card_Selection
-Date: 05/07/2023
+Date: 05/10/2023
 Purpose: Create a CardView class to add a Treeview for viewing cards to be added to the UI.py file
 '''
-from PyQt5.QtCore import Qt,QModelIndex
+from PyQt5 import QtGui
+from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QStandardItemModel, QBrush, QColor
 from PyQt5.QtWidgets import  QTreeView, QAbstractItemView
 
 from Read_Database import *
 from Card_Preview import *
+
+#NOTE These three functions (while functional) need to be optimized as alot of their code can be eliminated due to the Card_Selection.py files updated structure
 
 #Function To Add bot cards to treeview data model
 def treeBotCards(model,list):
@@ -157,7 +160,7 @@ class CardView(QTreeView):
     #Parent Widget must be a QtWidgets.Qwidget
     #Image Widget must be a QGraphicsScene Widget
     #Target Widget is the location of where to add cards after are added after being double clicked (default is None)
-    def __init__(self,parentWidget,imageWidget,targetWidget = None):
+    def __init__(self,parentWidget,imageWidget):
         super().__init__(parentWidget)
         #Create Treeview Items
         #remove left tab space from treeview
@@ -176,12 +179,11 @@ class CardView(QTreeView):
         self.imageWidget = imageWidget
         #initialize current row index (This will store the row that was last selected)
         self.currentRow = 999 #if 999 shows up as current row then their is a logic error somewhere
+        #initialize selection CardView widget (This will store where a selected card is to be placed
+        self.target = None
 
-        #Create Event Listener Items
-        #add event listener for treeview when treeview is clicked
-        self.clicked.connect(self.on_clicked)
-        #add event listener for treeview when treeview is double clicked
-        self.doubleClicked.connect(self.on_double_clicked)
+        #initialize variable to store type of cards in treeview (Bot,Battle,Strategem)
+        self.type = None
 
 
     #create the columns for the treeview
@@ -202,7 +204,7 @@ class CardView(QTreeView):
         #return data model
         return model
     
-    #add the data from a list of cards to the treeview
+    #add the data from a list of cards to the treeview (called at start of program)
     def addData(self,model,cardList):
         #Add Data From List To Columns (if the given list contains any values)
         if (len(cardList) > 0):
@@ -215,6 +217,7 @@ class CardView(QTreeView):
 
             #If Card Type reveals data to contain bot cards, set the data model accordingly
             if (currentCard.dataDict['cardType'] in ("Battle Master", "BotPiece", "Combiner", "TitanMaster Head", "TitanMaster Body", "Multiform", "Bot")):
+                self.type = "Bot"
                 model = treeBotCards(model,cardList)
 
                 #Set Column Width (Must Be Set After Adding Data)
@@ -225,6 +228,7 @@ class CardView(QTreeView):
 
             #If Card Type reveals data to contain battle cards, set the data model accordingly
             elif(currentCard.dataDict['cardType'] in ("Upgrade", "Action", "Secret Action")):
+                self.type = "Battle"
                 model = treeBattleCards(model,cardList)
 
                 #Set Column Width (Must Be Set After Adding Data)
@@ -235,6 +239,7 @@ class CardView(QTreeView):
 
             #Otherwise Card Type must be a Stratagem, set the data model accordingly
             else:
+                self.type = "Stratagem"
                 model = treeStratagemCards(model,cardList)
 
                 #Set Column Width (Must Be Set After Adding Data)
@@ -244,51 +249,174 @@ class CardView(QTreeView):
                 #Set Cost Column Width
                 self.setColumnWidth(1,5)
 
-    #event handler now prints currently selected card from treeview and sends that cards image to the card preview section
-    def on_clicked(self):
-        #Get all of the indexes of all of the columns within the row
-        selectedIndex = self.selectedIndexes()
-        #initialize current row and item text
-        text = ""
+    #add the data from a single card to a treeview (called on_double_clicked)
+    def addCard(self,addedCard):
+        #Get Name and Cost
+        fullName = addedCard.dataDict['name'] + " " + addedCard.dataDict.get('subName',"")
+        cost = addedCard.dataDict['cost']
 
-        #For the number of Qmodels get the items
-        for i in range(len(selectedIndex)):
-            #track where the index is currently
-            currentIndex = selectedIndex[i]
-            #get the current row
-            self.currentRow = currentIndex.row()
-            #use the index to get the name, cost from the selected item (that has been printed to the treeview)
-            item = self.model.itemFromIndex(currentIndex)
-            #add selection to test
-            text += item.text() + " "
-        
-        path = self.cardData[self.currentRow].dataDict["path"]
-        #print results of selection (useful when debugging)
-        print("\nNEW SELECTION\n")
-        print("Selection Text:",text)
-        print("Selection Row:", self.currentRow)
-        print("Selection Image String:", path)
+        #Adjust CardList
+        self.cardData.insert(0,addedCard)
 
-        #add image to image preview
-        self.imageWidget.addImage(path)
+        #Insert at Index 0
+        self.model.insertRow(0)
+        #Insert Full Name Of The Bot
+        self.model.setData(self.model.index(0, 0), fullName)
+        #Insert Cost Of The Bot
+        self.model.setData(self.model.index(0, 1), cost)
 
-    #event handler for double clicking (add a card from card list to card selection)
-    def on_double_clicked(self):
-        print("double clicked")
-        #using current row, get selected card data
+        #If the card type is a bot or stratagem add it with the following colors
+        if (self.type == "Bot" or self.type == "Stratagem"):
+            #Only set colors if the type of card being added is not a Stratagem
+            if (self.type != "Stratagem"):
+                #if the bot is an Autobot, set the background color values to red
+                if (addedCard.dataDict['loyalty'] == "Autobot"):
+                    r = 178
+                    g = 0
+                    b = 0
+                #if the bot is a Decepticon, set the background color values to purple
+                elif(addedCard.dataDict['loyalty'] == "Decepticon"):
+                    r = 67
+                    g = 0
+                    b = 67
+                #Otherwise the bot is a Mercenary, set the background color values to dark grey    
+                else:
+                    r = 51
+                    g = 51
+                    b = 51
+                    
+                #Add Color To Both Columns
 
-        #using selected card data determine which card selection section to add the card too
+                #Add Color To Name Column
+                self.model.setData(self.model.index(0, 0), QBrush(QColor(r,g,b)), Qt.BackgroundRole)
+                #Add Color To Cost Column
+                self.model.setData(self.model.index(0, 1), QBrush(QColor(r,g,b)), Qt.BackgroundRole)
 
-        #read cards currently in card selection section
+       #If the card type is a battle card add it with the following colors
+        else:
+            #Set quantity of added card to 1
+            self.model.setData(self.model.index(0,2),1)  
+            #Change Battle Card Background Color Based On type
+            
+            #if the card is an Action, set the background color values to white
+            if (addedCard.dataDict['cardType'] == "Action"):
+                r = 255
+                g = 255
+                b = 255
+            #if the card is an Secret Action, set the background color values to dark grey
+            elif(addedCard.dataDict['cardType'] == "Secret Action"):
+                r = 51
+                g = 51
+                b = 51
+            #if the card is an Upgrade Determine its subType by looking at its side, then set its colors accordingly
+            else:
+                #If the card is an Weapon set the background color values to an orange
+                if (addedCard.sideList[0].dataDict['subType'] == "Weapon"):
+                    r = 230
+                    g = 149
+                    b = 0
+                #If the card is an Armor set the background color to a light cyan
+                elif(addedCard.sideList[0].dataDict['subType'] == "Armor"):
+                    r = 0
+                    g = 255
+                    b = 255
+                #If the card is an Utility set the background color values to light grey
+                elif(addedCard.sideList[0].dataDict['subType'] == "Utility"):
+                    r = 128
+                    g = 128
+                    b = 128
+                #If the card is an Weapon Armor set the background color values to light green
+                else:
+                    r = 115
+                    g = 202
+                    b = 128
+            
+            #Add Color To All Three Columns
 
-        #if card type is not battle (not Action, Secret Action, Upgrade) and the card to be added is already in the card selection sectiom
-            #exit without adding the card
-        #else if card is battle
-            #if quantity of card is <=2
-                #add the card
-            #else
-                #exit without adding the card
+            #Add Color To Name Column
+            self.model.setData(self.model.index(0, 0), QBrush(QColor(r,g,b)), Qt.BackgroundRole)
+            #Add Color To Cost Column
+            self.model.setData(self.model.index(0, 1), QBrush(QColor(r,g,b)), Qt.BackgroundRole)
+            #Add Color To Quantity Column
+            self.model.setData(self.model.index(0, 2), QBrush(QColor(r,g,b)), Qt.BackgroundRole)
 
+    #method for setting which treeview cards should be added to
+    def setTarget(self,CardSelectionTree):
+        self.target = CardSelectionTree
+        #set types to be equal
+        CardSelectionTree.type = self.type
+
+    #Output the signals
+    def mousePressEvent(self,event):
+        #override the default event behavior
+        super().mousePressEvent(event)
+        #If the left mouse button is pressed and it has selected an row add the card image to the card preview section
+        if (event.button() == Qt.LeftButton and self.selectedIndexes()):
+            #Get all of the indexes of all of the columns within the row
+            selectedIndex = self.selectedIndexes()
+            #initialize current row and item text
+            text = ""
+
+            #For the number of Qmodels get the items
+            for i in range(len(selectedIndex)):
+                #track where the index is currently
+                currentIndex = selectedIndex[i]
+                #get the current row
+                self.currentRow = currentIndex.row()
+                #use the index to get the name, cost from the selected item (that has been printed to the treeview)
+                item = self.model.itemFromIndex(currentIndex)
+                #add selection to test
+                text += item.text() + " "
+            
+            path = self.cardData[self.currentRow].dataDict["path"]
+            #print results of selection (useful when debugging)
+            print("\nNEW SELECTION\n")
+            print("Selection Text:",text)
+            print("Selection Row:", self.currentRow)
+            print("Selection Image String:", path)
+
+            #add image to image preview
+            self.imageWidget.addImage(path)
+            
+
+    def mouseDoubleClickEvent(self,event):
+        #override the default event behavior
+        super().mouseDoubleClickEvent(event)
+        #If the left mouse button is pressed and it has selected an row add the card to the selection area
+        if (event.button() == Qt.LeftButton and self.selectedIndexes()):
+            print("double click result:")
+            #using current row, get selected card data
+            selectedCard = self.cardData[self.currentRow]
+
+            #Check if the card is already in the selection CardView
+            if (selectedCard in (self.target.cardData)):
+                print("Card is a duplicate")
+                #If the card to be added to the deck is a Battle Card (Action, Secret Action, Upgrade)
+                if (self.target.type == "Battle"):
+                    #find the location of the card (the location in the parallel list will be identical to the row in the treeview)
+                    cardLocation = self.target.cardData.index(selectedCard)
+                    #using the cards location and the quantity column (2) pull the quantity from the treeview
+                    dataIndex = (self.target.model.index(cardLocation,2))
+                    quantity = int(self.target.model.data(dataIndex,Qt.DisplayRole))
+                    #by rule only 3 of the same battle card are allowed in the same deck, this enforces that constraint
+                    if (quantity < 3):
+                        #increment quantity
+                        quantity += 1
+                        #add new quantity to treeview
+                        self.target.model.setData(dataIndex, quantity)
+                        print("The Quantity of: " + selectedCard.dataDict['name'] + " is now ", quantity)
+                    else:
+                        print("Three copies of ",selectedCard.dataDict['name'], " have already been added to the deck")
+
+                #if the card is not a battle card, than duplicate cards cannot be added
+                else:
+                    print("Duplicate Bot or Stratagem Cards Cannot Be Added")
+
+            #If the card has not been added yet, add it to its proper selection section
+            else:
+                print("Adding: " + selectedCard.dataDict['name'] + "To the deck")
+                #Add the card to the treeview
+                self.target.addCard(selectedCard)
         
         
     

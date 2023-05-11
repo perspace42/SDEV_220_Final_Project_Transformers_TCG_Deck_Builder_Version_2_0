@@ -7,7 +7,7 @@
 # WARNING: Any manual changes made to this file will be lost if pyuic5 is
 # run again.  Do not run pyuic again, at this stage in the project we need to be editing this file manually
 
-# Authors: Ashton Wood, Scott Field
+# Original Authors: Ashton Wood, Scott Field
 
 # editors note: the widgets are oranized to have the configuration above the self.centralwidget.setObjectName line.
 # The following widgets would be separated in this fashion
@@ -29,6 +29,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QVBoxLayout, QWidget
 #import the custom treeview
 from Card_Selection import *
+from Card_Removal import *
 
 
 class Ui_MainWindow(object):
@@ -308,11 +309,15 @@ class Ui_MainWindow(object):
         self.CardsList.addTab(self.Strategem, "")
 
         #configure the section where selected bot and battle cards are placed
-        self.SelectedBotCards = CardView(self.centralwidget,self.CardPreviewSection)
+        self.SelectedBotCards = CardSelect(self.centralwidget,self.CardPreviewSection)
         self.SelectedBotCards.setGeometry(QtCore.QRect(326, 220, 241, 311))
         self.SelectedBotCards.setObjectName("SelectedBotCards")
 
-        self.SelectedBattleCards = CardView(self.centralwidget,self.CardPreviewSection)
+        #Set Both CardViews To Add selected Card To SelectedBotCards when double clicked
+        self.BotCardTree.setTarget(self.SelectedBotCards)
+        self.SelectedBotCards.setTarget(self.SelectedBotCards)
+
+        self.SelectedBattleCards = CardSelect(self.centralwidget,self.CardPreviewSection)
         #add the quantity column to the selected battle cards CardView (by changing the model to include a third column)
         self.SelectedBattleCards.model = self.SelectedBattleCards.createDataModel(3)
         #set the model that has just been added
@@ -321,10 +326,21 @@ class Ui_MainWindow(object):
         self.SelectedBattleCards.setGeometry(QtCore.QRect(588, 220, 230, 441))
         self.SelectedBattleCards.setObjectName("SelectedBattleCards")
 
-
+        #Set Both CardViews To Add selected Card to SelectedBattleCards when double clicked
+        self.BattleCardTree.setTarget(self.SelectedBattleCards)
+        self.SelectedBattleCards.setTarget(self.SelectedBattleCards)
 
         self.SelectedBattleCards.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection) #what is the purpose of this line Ashton?
         # The above line confines the user to only have one battle card selected at any given time, to make the card display work properly.
+
+        # Create and configure widget showing selected strategem cards
+        self.SelectedStrategemCards = CardSelect(self.centralwidget,self.CardPreviewSection)
+        self.SelectedStrategemCards.setGeometry(QtCore.QRect(326, 551, 241, 110))
+        self.SelectedStrategemCards.setObjectName("SelectedStrategemCards")
+
+        #Set Both CardViews To Add selected Card to SelectedStrategemCards when double clicked
+        self.StrategemCardTree.setTarget(self.SelectedStrategemCards)
+        self.SelectedStrategemCards.setTarget(self.SelectedStrategemCards)
 
         # Create and configure the totals widget
         self.Totals = QtWidgets.QTreeView(self.centralwidget)
@@ -344,10 +360,8 @@ class Ui_MainWindow(object):
         self.CardPreviewL.setGeometry(QtCore.QRect(840, 0, 231, 20))
         self.CardPreviewL.setObjectName("CardPreviewL")
 
-        # Create and configure widget showing selected strategem cards
-        self.SelectedStrategemCards = CardView(self.centralwidget,self.CardPreviewSection)
-        self.SelectedStrategemCards.setGeometry(QtCore.QRect(326, 551, 241, 110))
-        self.SelectedStrategemCards.setObjectName("SelectedStrategemCards")
+        #Add A Label to the Selected Stratagem Cards Section
+        #NOTE this needs be renamed as adding a _2 to the end of a variable is a terrible practice
         self.SelectedStrategemCards_2 = QtWidgets.QLabel(self.centralwidget)
         self.SelectedStrategemCards_2.setGeometry(QtCore.QRect(326, 532, 231, 16))
         self.SelectedStrategemCards_2.setObjectName("SelectedStrategemCardsL")
