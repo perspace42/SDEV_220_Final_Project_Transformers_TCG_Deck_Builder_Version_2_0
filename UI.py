@@ -26,11 +26,12 @@
 # self.BotTraitsL.setObjectName("BotTraitsL")
 
 # The sections from top to bottom, contain the object widget, location on screen, and name.
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QVBoxLayout, QWidget
+from PyQt5 import QtCore, QtWidgets
+
 #import the custom treeview
 from Card_Selection import *
 from Card_Removal import *
+from Card_Total import *
 
 
 class Ui_MainWindow(object):
@@ -56,6 +57,13 @@ class Ui_MainWindow(object):
         self.CardsList.setMovable(False)
         self.CardsList.setObjectName("CardsList")
 
+        # Create and configure the totals widget (Stores total number of points spent and cards added)
+        self.Totals = Total(self.centralwidget)
+        #90 was changed to 20
+        self.Totals.setGeometry(QtCore.QRect(457, 30, 241, 170))
+        self.Totals.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.Totals.setObjectName("Totals")
+
         # Create a widget for the bot and its components
         self.Bot = QtWidgets.QWidget()
         self.Bot.setObjectName("Bot")
@@ -74,7 +82,6 @@ class Ui_MainWindow(object):
         self.BotCardTree.createDataModel()
         self.BotCardTree.addData(self.BotCardTree.model,botCardList)
         
-
         #Drawing The CardView (TreeView)
         self.BotCardTree.setGeometry(QtCore.QRect(0, 250, 313, 477))
         self.BotCardTree.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -318,6 +325,11 @@ class Ui_MainWindow(object):
         self.BotCardTree.setTarget(self.SelectedBotCards)
         self.SelectedBotCards.setTarget(self.SelectedBotCards)
 
+        #Set Both CardViews to Add quantity of cards and cost of cards to the Totals Table
+        self.BotCardTree.setTotal(self.Totals)
+        self.SelectedBotCards.setTotal(self.Totals)
+
+
         self.SelectedBattleCards = CardSelect(self.centralwidget,self.CardPreviewSection)
         #add the quantity column to the selected battle cards CardView (by changing the model to include a third column)
         self.SelectedBattleCards.model = self.SelectedBattleCards.createDataModel(3)
@@ -331,6 +343,10 @@ class Ui_MainWindow(object):
         self.BattleCardTree.setTarget(self.SelectedBattleCards)
         self.SelectedBattleCards.setTarget(self.SelectedBattleCards)
 
+        #Set Both CardViews to Add quantity of cards and cost of cards to the Totals Table
+        self.BattleCardTree.setTotal(self.Totals)
+        self.SelectedBattleCards.setTotal(self.Totals)
+
         self.SelectedBattleCards.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection) #what is the purpose of this line Ashton?
 
         # Create and configure widget showing selected strategem cards
@@ -342,12 +358,15 @@ class Ui_MainWindow(object):
         self.StrategemCardTree.setTarget(self.SelectedStrategemCards)
         self.SelectedStrategemCards.setTarget(self.SelectedStrategemCards)
 
-        # Create and configure the totals widget
-        self.Totals = QtWidgets.QTreeView(self.centralwidget)
-        self.Totals.setGeometry(QtCore.QRect(457, 660, 241, 91))
-        self.Totals.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.Totals.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
-        self.Totals.setObjectName("Totals")
+        #Set Both CardViews to Add quantity of cards and cost of cards to the Totals Table
+        self.StrategemCardTree.setTotal(self.Totals)
+        self.SelectedStrategemCards.setTotal(self.Totals)
+
+        #configure label for the totals widget
+        self.TotalsLabel = QtWidgets.QLabel(self.centralwidget)
+        #70 was changed to 30
+        self.TotalsLabel.setGeometry(QtCore.QRect(457,10,231,20))
+        self.TotalsLabel.setObjectName("TotalsLabel")
 
         # Add labels
         self.SelectedBotCardsL = QtWidgets.QLabel(self.centralwidget)
@@ -507,7 +526,11 @@ class Ui_MainWindow(object):
         self.actionSave_As.setText(_translate("MainWindow", "Save As"))
         self.actionNew.setText(_translate("MainWindow", "New"))
         self.actionExit.setText(_translate("MainWindow", "Exit"))
-        self.actionClose.setText(_translate("MainWindow", "Close"))       
+        self.actionClose.setText(_translate("MainWindow", "Close"))   
+
+        self.TotalsLabel.setText(_translate("MainWindow","Deck:"))
+        
+        
 
 if __name__ == "__main__":
     import sys

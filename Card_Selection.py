@@ -181,6 +181,8 @@ class CardView(QTreeView):
         self.currentRow = 999 #if 999 shows up as current row then their is a logic error somewhere
         #initialize selection CardView widget (This will store where a selected card is to be placed
         self.target = None
+        #initialize table Total widget (This will store the quantity and point total of the deck)
+        self.table = None
 
         #initialize variable to store type of cards in treeview (Bot,Battle,Strategem)
         self.type = None
@@ -346,6 +348,35 @@ class CardView(QTreeView):
         #set types to be equal
         CardSelectionTree.type = self.type
 
+    #method for storing the totals table
+    def setTotal(self,TotalTable):
+        self.table = TotalTable
+
+    #Add The Cards Data To The Totals Table         
+    def adjustTotal(self,cardLocation,adding = True):
+        #Find the Cost Of The Bot Card To Add To The Totals Table
+            dataIndex = (self.target.model.index(cardLocation,1))
+            cost = int(self.target.model.data(dataIndex,Qt.DisplayRole))
+                
+            if (self.type == "Bot"):
+                cardPoint = "Bot Point"
+                cardType = "Bot Card"
+            elif(self.type == "Stratagem"):
+                cardPoint = "Stratagem Point"
+                cardType = "Stratagem Card"
+            #type is Battle
+            else:
+                cardPoint = "Battle Point"
+                cardType = "Battle Card"
+
+            #adding checks if cards are being removed or added to the quantity total
+            if (adding):
+                self.table.addValue(cost,cardPoint)
+                self.table.addValue(1,cardType)
+            else:
+                self.table.addValue(-1*cost,cardPoint)
+                self.table.addValue(-1,cardType)
+
     #Output the signals
     def mousePressEvent(self,event):
         #override the default event behavior
@@ -400,6 +431,9 @@ class CardView(QTreeView):
                         #add new quantity to treeview
                         self.target.model.setData(dataIndex, quantity)
                         print("The Quantity of: " + selectedCard.dataDict['name'] + " is now ", quantity)
+
+                        #Add The Cards Data To The Totals Table
+                        self.adjustTotal(self.target.cardData.index(selectedCard))
                     else:
                         print("Three copies of ",selectedCard.dataDict['name'], " have already been added to the deck")
 
@@ -412,6 +446,12 @@ class CardView(QTreeView):
                 print("Adding: " + selectedCard.dataDict['name'] + " To the deck")
                 #Add the card to the treeview
                 self.target.addCard(selectedCard)
+
+                #Add The Cards Data To The Totals Table
+                self.adjustTotal(self.target.cardData.index(selectedCard))
+
+           
+
         
         
     

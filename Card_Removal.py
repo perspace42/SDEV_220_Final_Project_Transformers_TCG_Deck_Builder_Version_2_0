@@ -52,6 +52,9 @@ class CardSelect(CardView):
             selectedIndex = self.currentIndex()
             self.currentRow = selectedIndex.row()
 
+            #Adjust Totals (Must adjust total BEFORE removing current row)
+            self.adjustTotal(self.currentRow,False)
+
             print ("Removing: ",self.cardData[self.currentRow].dataDict['name'], " from the deck")
 
             if (self.type != "Battle"):
@@ -79,6 +82,8 @@ class CardSelect(CardView):
 
                     #Remove the Card From The Parallel List
                     self.cardData.pop(self.currentRow)
+            
+            
 
             
                      
