@@ -10,10 +10,10 @@ This is the second version of the Transformers TCG Deck Builder Project. It cont
 
 ##Info
 -Cards Within the deck builder (besides Strategems are color coded to reflect their type)
-    *Red: Autobots
-    *Purple: Decepticons
-    *Grey: Mercenaries
-    etc*
+    -*Red: Autobots*
+    -*Purple: Decepticons*
+    -*Grey: Mercenaries*
+    -*etc*
     
 -This program was made to be navigated using the mouse
 
