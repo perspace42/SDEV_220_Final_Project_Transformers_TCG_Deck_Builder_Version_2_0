@@ -30,7 +30,7 @@ class Total(QTableWidget):
         self.setColumnCount(2)
         self.setRowCount(7)
 
-        #Set Battle Cards Data Tracker
+        #Set Cards Data Tracker
         self.setItem(0, 0, QTableWidgetItem("Battle Cards:"))
         self.setItem(0, 1, QTableWidgetItem("0/40"))
 
@@ -146,6 +146,30 @@ class Total(QTableWidget):
             
             #Set the string to the total table location (This happens every time a card is added or removed)
             self.setItem(row,column, QTableWidgetItem(dataString))
+
+    #return all table values to default
+    def reset(self):
+        self.setItem(0, 0, QTableWidgetItem("Battle Cards:"))
+        self.setItem(0, 1, QTableWidgetItem("0/40"))
+
+        self.setItem(1, 0, QTableWidgetItem("Total Points:"))
+        self.setItem(1, 1, QTableWidgetItem("0/25"))
+
+        self.setItem(2, 0, QTableWidgetItem("Battle Points:"))
+        self.setItem(2, 1, QTableWidgetItem("0"))
+
+        self.setItem(3, 0, QTableWidgetItem("Bot Cards:"))
+        self.setItem(3, 1, QTableWidgetItem("0"))
+
+        self.setItem(4, 0, QTableWidgetItem("Bot Points:"))
+        self.setItem(4, 1, QTableWidgetItem("0"))
+
+        self.setItem(5, 0, QTableWidgetItem("Stratagem Cards:"))
+        self.setItem(5, 1, QTableWidgetItem("0"))
+
+        self.setItem(6, 0, QTableWidgetItem("Stratagem Points:"))
+        self.setItem(6, 1, QTableWidgetItem("0"))
+
 
 
 

@@ -457,7 +457,7 @@ class CardView(QTreeView):
         super().mouseDoubleClickEvent(event)
         #If the left mouse button is pressed and it has selected an row add the card to the selection area
         if (event.button() == Qt.LeftButton and self.selectedIndexes()):
-            #check to see if the card has already been added, if so adjust quantity column if quantity < 3, if not add the card
+            #check to see if the card has already been added, if so adjust quantity column by +1 if quantity < 3, if not add the card
             self.checkCard()
 
     

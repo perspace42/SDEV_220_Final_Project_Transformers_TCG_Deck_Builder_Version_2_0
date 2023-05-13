@@ -433,6 +433,7 @@ class Ui_MainWindow(object):
         #Close File
         self.actionClose = QtWidgets.QAction(MainWindow)
         self.actionClose.setObjectName("actionClose")
+        self.actionClose.triggered.connect(lambda func: [print("Closing File"),self.closeFile()])
 
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionSave_As)
@@ -629,6 +630,37 @@ class Ui_MainWindow(object):
                 #iterate across the data, adding the cards to the treeview
                 for index in range(len(stratagemData)):
                     self.SelectedStrategemCards.checkCard(stratagemData[index])
+
+    #Close a deck (formatted txt) file
+    def closeFile(self):
+        #remove current file
+        self.currentFile = ""
+        #reset data
+        
+        #remove rows
+        self.SelectedBotCards.model.removeRows(0,self.SelectedBotCards.model.rowCount())
+        #remove cards
+        self.SelectedBotCards.cardData = []
+        #update treeview
+        self.SelectedBotCards.reset()
+
+        #remove rows
+        self.SelectedBattleCards.model.removeRows(0,self.SelectedBattleCards.model.rowCount())
+        #remove cards
+        self.SelectedBattleCards.cardData = []
+        #update treeview
+        self.SelectedBattleCards.reset()
+
+        #remove rows
+        self.SelectedStrategemCards.model.removeRows(0,self.SelectedStrategemCards.model.rowCount())
+        #remove cards
+        self.SelectedStrategemCards.cardData = []
+        #update treeview
+        self.SelectedStrategemCards.reset()
+
+        #clear the Totals table
+        self.Totals.reset()
+       
 
         
 if __name__ == "__main__":
