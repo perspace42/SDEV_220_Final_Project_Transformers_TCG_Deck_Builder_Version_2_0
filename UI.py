@@ -402,17 +402,18 @@ class Ui_MainWindow(object):
 
         #Inserting Actions Into File Menu
 
-        #Save File
-
         #stores current File Name
         self.currentFile = ""
 
+        #Save File
         self.actionSave = QtWidgets.QAction(MainWindow)
         self.actionSave.setObjectName("actionSave")
+        self.actionSave.triggered.connect(lambda func: [print("Saving: " + self.currentFile),self.saveDeck()])
 
         #Save File As
         self.actionSave_As = QtWidgets.QAction(MainWindow)
         self.actionSave_As.setObjectName("actionSave_As")
+        self.actionSave_As.triggered.connect(lambda func: [print("Saving As: " + self.currentFile),self.saveDeckAs()])
 
         #New Window
         self.actionNew = QtWidgets.QAction(MainWindow)
@@ -428,12 +429,12 @@ class Ui_MainWindow(object):
         #Open File
         self.actionOpen = QtWidgets.QAction(MainWindow)
         self.actionOpen.setObjectName("actionOpen")
-        self.actionOpen.triggered.connect(lambda func: [print("Opening File"),self.openFile()])
+        self.actionOpen.triggered.connect(lambda func: [print("Opening File"),self.openDeck()])
 
         #Close File
         self.actionClose = QtWidgets.QAction(MainWindow)
         self.actionClose.setObjectName("actionClose")
-        self.actionClose.triggered.connect(lambda func: [print("Closing File"),self.closeFile()])
+        self.actionClose.triggered.connect(lambda func: [print("Closing File"),self.closeDeck()])
 
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionSave_As)
@@ -581,7 +582,7 @@ class Ui_MainWindow(object):
         newMainWindow.showMaximized()
 
     #Open a deck (formatted txt) file
-    def openFile(self):
+    def openDeck(self):
         #set file options
         fileOptions = QFileDialog.Options()
         #set file type
@@ -632,7 +633,7 @@ class Ui_MainWindow(object):
                     self.SelectedStrategemCards.checkCard(stratagemData[index])
 
     #Close a deck (formatted txt) file
-    def closeFile(self):
+    def closeDeck(self):
         #remove current file
         self.currentFile = ""
         #reset data
@@ -661,8 +662,92 @@ class Ui_MainWindow(object):
         #clear the Totals table
         self.Totals.reset()
        
+    #save a deck (formatted text) file as the file that the user inputs
+    def saveDeckAs(self):
+        #set file options
+        fileOptions = QFileDialog.Options()
+        #set file type
+        fileType = "Text Files (*.txt)"
+        #get file name
+        fileName = QFileDialog.getSaveFileName(None,"Open Deck","",fileType,options = fileOptions)
+        #store current File
+        self.currentFile = fileName[0]
+        #if file name is valid
+        if (fileName):
+            #If there are any battle cards in the deck get both them and their quantity, otherwise set battleCards to None
+            if len(self.SelectedBattleCards.cardData) == 0:
+                battleTuple = None
+            else:
+                #get the cards and quantity of the cards
+                battleCards = self.SelectedBattleCards.cardData
+                battleQuantity = []
+                #iterate across the treeview to find the quantity
+                for currentRow in range(len(battleCards)):
+                    dataIndex = (self.SelectedBattleCards.model.index(currentRow,2))
+                    quantity = int(self.SelectedBattleCards.model.data(dataIndex,Qt.DisplayRole))
+                    #add the quantity to the parallel list
+                    battleQuantity.append(quantity)
+                
+                #add both lists to the battleTuple
+                battleTuple = (battleCards,battleQuantity)
 
-        
+            #If there are any bot cards in the deck get them
+            if len(self.SelectedBotCards.cardData) == 0:
+                botCards = None
+            else:
+                botCards = self.SelectedBotCards.cardData
+
+            #If there are any stratagem cards in the deck get them
+            if len(self.SelectedStrategemCards.cardData) == 0:
+                strategemCards = None
+            else:
+                strategemCards = self.SelectedStrategemCards.cardData
+
+
+            #save the file
+            saveFile(fileName[0],botCards,battleTuple,strategemCards)
+
+    #saves a deck (formatted text file) to the file the user has previously specified
+    #if none has been specified the user is asked to submit a file
+    def saveDeck(self):
+        #if their is no current file
+        if (self.currentFile == ""):
+            #ask the user to input one before saving
+            self.saveDeckAs()
+        else:
+            #If there are any battle cards in the deck get both them and their quantity, otherwise set battleCards to None
+            if len(self.SelectedBattleCards.cardData) == 0:
+                battleTuple = None
+            else:
+                #get the cards and quantity of the cards
+                battleCards = self.SelectedBattleCards.cardData
+                battleQuantity = []
+                #iterate across the treeview to find the quantity
+                for currentRow in range(len(battleCards)):
+                    dataIndex = (self.SelectedBattleCards.model.index(currentRow,2))
+                    quantity = int(self.SelectedBattleCards.model.data(dataIndex,Qt.DisplayRole))
+                    #add the quantity to the parallel list
+                    battleQuantity.append(quantity)
+                
+                #add both lists to the battleTuple
+                battleTuple = (battleCards,battleQuantity)
+
+            #If there are any bot cards in the deck get them
+            if len(self.SelectedBotCards.cardData) == 0:
+                botCards = None
+            else:
+                botCards = self.SelectedBotCards.cardData
+
+            #If there are any stratagem cards in the deck get them
+            if len(self.SelectedStrategemCards.cardData) == 0:
+                strategemCards = None
+            else:
+                strategemCards = self.SelectedStrategemCards.cardData
+
+
+            #save the file
+            saveFile(self.currentFile,botCards,battleTuple,strategemCards)
+
 if __name__ == "__main__":
     import sys
     #initialize application
