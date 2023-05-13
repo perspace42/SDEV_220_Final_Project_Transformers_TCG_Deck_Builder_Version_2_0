@@ -1,10 +1,21 @@
+'''
+Author: Scott Field
+Version: 1.0
+Name: Card_Total
+Date: 05/11/2023
+Purpose: Create a table to track the number of cards added to the deck and the
+number of points spent by adding those cards.
+'''
+
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 
+#A table seemed the most logical widget to place the data in
 class Total(QTableWidget):
     def __init__(self,parentWidget):
         super().__init__(parentWidget)
 
+        #Variables to Track Card Data
         self.numBotCards = 0
         self.numBattleCards = 0
         self.numStratagemCards = 0
@@ -42,7 +53,8 @@ class Total(QTableWidget):
         self.setItem(6, 1, QTableWidgetItem("0"))
 
         
-
+    #Add a value (positive or negative) to the correct row,column in the table
+    #determined by dataType
     def addValue(self,value,dataType):
         #If adding cards to the table
         if (dataType == "Battle Card"):
@@ -131,7 +143,8 @@ class Total(QTableWidget):
             column = 1
             self.pointsTotal += value
             dataString = str(self.pointsTotal) + "/25"
-
+            
+            #Set the string to the total table location (This happens every time a card is added or removed)
             self.setItem(row,column, QTableWidgetItem(dataString))
 
 

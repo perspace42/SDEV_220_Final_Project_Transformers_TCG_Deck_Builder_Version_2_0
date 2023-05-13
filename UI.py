@@ -35,6 +35,7 @@ from Card_Total import *
 
 
 class Ui_MainWindow(object):
+    
     def setupUi(self, MainWindow):
 
         # Set the object name and resize the main window
@@ -381,9 +382,9 @@ class Ui_MainWindow(object):
 
         #Add A Label to the Selected Stratagem Cards Section
         #NOTE this needs be renamed as adding a _2 to the end of a variable is a terrible practice
-        self.SelectedStrategemCards_2 = QtWidgets.QLabel(self.centralwidget)
-        self.SelectedStrategemCards_2.setGeometry(QtCore.QRect(326, 532, 231, 16))
-        self.SelectedStrategemCards_2.setObjectName("SelectedStrategemCardsL")
+        self.SelectedStrategemCardsLabel = QtWidgets.QLabel(self.centralwidget)
+        self.SelectedStrategemCardsLabel.setGeometry(QtCore.QRect(326, 532, 231, 16))
+        self.SelectedStrategemCardsLabel.setObjectName("SelectedStrategemCardsL")
 
         # Create and configure the menu bar and options
         MainWindow.setCentralWidget(self.centralwidget)
@@ -396,16 +397,32 @@ class Ui_MainWindow(object):
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+
+        #Inserting Actions Into File Menu
+
+        #Save File
         self.actionSave = QtWidgets.QAction(MainWindow)
         self.actionSave.setObjectName("actionSave")
+
+        #Save File As
         self.actionSave_As = QtWidgets.QAction(MainWindow)
         self.actionSave_As.setObjectName("actionSave_As")
+
+        #New Window
         self.actionNew = QtWidgets.QAction(MainWindow)
         self.actionNew.setObjectName("actionNew")
+        self.actionNew.triggered.connect(lambda func: self.newWindow())
+        
+
+        #Exit Window
         self.actionExit = QtWidgets.QAction(MainWindow)
         self.actionExit.setObjectName("actionExit")
+        self.actionExit.triggered.connect(lambda func: [print("Closing Window"),MainWindow.close()])
+
+        #CLose File
         self.actionClose = QtWidgets.QAction(MainWindow)
         self.actionClose.setObjectName("actionClose")
+
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionSave_As)
         self.menuFile.addAction(self.actionNew)
@@ -418,6 +435,9 @@ class Ui_MainWindow(object):
         self.CardsList.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+
+        #Track MainWindow After Adding All of The Widgets To It
+        self.MainWindow = MainWindow
 
     # Sets text and labels for UI
     def retranslateUi(self, MainWindow):
@@ -520,7 +540,7 @@ class Ui_MainWindow(object):
         self.SelectedBotCardsL.setText(_translate("MainWindow", "Selected Bot Cards"))
         self.SelectedBattleCardsL.setText(_translate("MainWindow", "Selected Battle Cards"))
         self.CardPreviewL.setText(_translate("MainWindow", "Card Preview"))
-        self.SelectedStrategemCards_2.setText(_translate("MainWindow", "Selected Strategem Cards"))
+        self.SelectedStrategemCardsLabel.setText(_translate("MainWindow", "Selected Strategem Cards"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.actionSave.setText(_translate("MainWindow", "Save"))
         self.actionSave_As.setText(_translate("MainWindow", "Save As"))
@@ -529,9 +549,20 @@ class Ui_MainWindow(object):
         self.actionClose.setText(_translate("MainWindow", "Close"))   
 
         self.TotalsLabel.setText(_translate("MainWindow","Deck:"))
-        
-        
 
+    
+
+    #File Menu Functions Go Here
+
+    #Open a new empty window
+    def newWindow(self):
+        print("Opening New Window")
+        newUi = Ui_MainWindow()
+        newMainWindow = QtWidgets.QMainWindow()
+        newUi.setupUi(newMainWindow)
+        newMainWindow.showMaximized()
+
+        
 if __name__ == "__main__":
     import sys
     #initialize application

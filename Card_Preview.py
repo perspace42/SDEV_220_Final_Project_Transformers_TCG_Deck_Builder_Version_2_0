@@ -1,5 +1,5 @@
 '''
-Author: Scott
+Author: Scott Field
 Version: 2.1
 Name: Card_Preview
 Date: 05/09/2023

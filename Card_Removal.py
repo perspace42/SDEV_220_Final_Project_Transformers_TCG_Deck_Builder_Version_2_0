@@ -1,5 +1,5 @@
 '''
-Author: Scott
+Author: Scott Field
 Version: 1.0
 Name: Card_Removal
 Date: 05/10/2023

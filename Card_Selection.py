@@ -1,12 +1,11 @@
 '''
-Author: Scott
+Author: Scott Field
 Version: 3.0
 Name: Card_Selection
 Date: 05/10/2023
 Purpose: Create a CardView class to add a Treeview for viewing cards to be added to the UI.py file
 '''
-from PyQt5 import QtGui
-from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QStandardItemModel, QBrush, QColor
 from PyQt5.QtWidgets import  QTreeView, QAbstractItemView
 
