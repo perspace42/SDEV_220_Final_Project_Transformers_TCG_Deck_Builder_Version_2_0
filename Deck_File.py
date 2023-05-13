@@ -90,63 +90,55 @@ def readFile(fileName):
         #remove newline character if it is present
         fileLines[index].strip("\n")
     
-    print(fileLines)
+    #print the data within the file
+    #print(fileLines)
 
     #If file contains bot card data
     if (fileLines[0] == "Bot Cards Header:"):
         counter = 1
+        end = fileLines.index('Bot Cards Footer')
         #while the end of the bot section hasn't been reached, continue iteration
-        while (fileLines[counter] != 'Bot Cards Footer'):
+        for counter in range(counter,end):
             botData.append(fileLines[counter])
-            counter += 1
+            #print(fileLines[counter])
     else:
         botData = None
     
     #If file contains stratagem card data
     if ("Stratagem Cards Header:" in fileLines):
         counter = fileLines.index("Stratagem Cards Header:") + 1
-        while (fileLines[counter] != 'Stratagem Cards Footer'):
+        end = fileLines.index('Stratagem Cards Footer') 
+        for counter in range(counter,end):
             stratagemData.append(fileLines[counter])
-            counter += 1
+            #print(fileLines[counter])
     else:
         stratagemData = None
 
     #If file contains battle card data
     if ("Battle Cards Header:" in fileLines):
         counter = fileLines.index("Battle Cards Header:") + 1
-        while (fileLines[counter] != "Battle Cards Footer"):
+        end = fileLines.index("Battle Cards Footer") 
+        for counter in range(counter,end):
             #get the quantity from the string
-            battleQuantity.append(fileLines[counter][-1])
+            battleQuantity.append(fileLines[counter][-2])
             #get the card name from the string
             battleCards.append(fileLines[counter][0:-3])
+            #print(fileLines[counter][0:-3],(fileLines[counter])[-2])
 
         #Set BattleData
         battleData = (battleCards,battleQuantity)
     else:
-        stratagemData = None
+        battleData = None
     
-
-
-    print("Bot Data:\n",botData)
-    print("Battle Data:\n",battleData)
-    print("Stratagem Data:\n",stratagemData)
-
+    #print the results of reading the file
+    print("Bot Cards:\n" , botData , "\n")
+    print("Battle Cards:\n",battleData,"\n")
+    print("Stratagem Cards:\n",stratagemData,"\n")
     
     
 
 #This is for test purposes no card will have a quantity value greater than 3
-battleQuantityList = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]
+battleQuantityList = [0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9]
 
 saveFile("test.txt",botCardList,(battleCardList,battleQuantityList),stratagemCardList)
 readFile("test.txt")
-
-
-
-         
-
-        
-    
-
-
-
-    
