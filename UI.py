@@ -348,7 +348,7 @@ class Ui_MainWindow(object):
         self.BattleCardTree.setTotal(self.Totals)
         self.SelectedBattleCards.setTotal(self.Totals)
 
-        self.SelectedBattleCards.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection) #what is the purpose of this line Ashton?
+        self.SelectedBattleCards.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection) 
 
         # Create and configure widget showing selected strategem cards
         self.SelectedStrategemCards = CardSelect(self.centralwidget,self.CardPreviewSection)
@@ -442,7 +442,7 @@ class Ui_MainWindow(object):
     # Sets text and labels for UI
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Transformers TCG Deck Builder"))
         self.CardsList.setToolTip(_translate("MainWindow", "<html><head/><body><p>Battle Cards</p></body></html>"))
         self.DecepticonCheckbox.setText(_translate("MainWindow", "Decepticons"))
         self.MercenaryCheckbox.setText(_translate("MainWindow", "Mercenaries"))
@@ -556,10 +556,15 @@ class Ui_MainWindow(object):
 
     #Open a new empty window
     def newWindow(self):
+        #print what just happened
         print("Opening New Window")
+        #define a new user interface instance
         newUi = Ui_MainWindow()
+        #define a new main window
         newMainWindow = QtWidgets.QMainWindow()
+        #attach the user interface instance to the new main window
         newUi.setupUi(newMainWindow)
+        #show the new main window
         newMainWindow.showMaximized()
 
         
