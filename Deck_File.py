@@ -81,12 +81,14 @@ def readFile(fileName):
     file = open(fileName,"r")
     #convert file into list
     fileLines = file.read().splitlines()
+    #close file immediatly after reading
+    file.close()
    
 
     #Remove all newline characters
     for index in range(len(fileLines)):
         #remove newline character if it is present
-        line = fileLines[index].strip("\n")
+        fileLines[index].strip("\n")
     
     print(fileLines)
 
@@ -129,7 +131,7 @@ def readFile(fileName):
     print("Battle Data:\n",battleData)
     print("Stratagem Data:\n",stratagemData)
 
-    file.close()
+    
     
 
 #This is for test purposes no card will have a quantity value greater than 3
