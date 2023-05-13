@@ -341,6 +341,54 @@ class CardView(QTreeView):
             #Add Color To Quantity Column
             self.model.setData(self.model.index(0, 2), QBrush(QColor(r,g,b)), Qt.BackgroundRole)
 
+    #check if a card needs to be added to the treeview, or the quantity tab in that treeview needs adjusted (called on_double_clicked)
+    #then adjust the totals table by the added card
+    def checkCard(self,card = None):
+        print("double click result:")
+        #using current row, get selected card data, unless a card is provided
+        if (card == None):
+            selectedCard = self.cardData[self.currentRow]
+        #otherwise use the provided card
+        else:
+            selectedCard = card
+
+        #Check if the card is already in the selection CardView
+        if (selectedCard in (self.target.cardData)):
+            print("Card is a duplicate")
+            #If the card to be added to the deck is a Battle Card (Action, Secret Action, Upgrade)
+            if (self.target.type == "Battle"):
+                #find the location of the card (the location in the parallel list will be identical to the row in the treeview)
+                cardLocation = self.target.cardData.index(selectedCard)
+                #using the cards location and the quantity column (2) pull the quantity from the treeview
+                dataIndex = (self.target.model.index(cardLocation,2))
+                quantity = int(self.target.model.data(dataIndex,Qt.DisplayRole))
+                #by rule only 3 of the same battle card are allowed in the same deck, this enforces that constraint
+                if (quantity < 3):
+                    #increment quantity
+                    quantity += 1
+                    #add new quantity to treeview
+                    self.target.model.setData(dataIndex, quantity)
+                    print("The Quantity of: " + selectedCard.dataDict['name'] + " is now ", quantity)
+
+                    #Add The Cards Data To The Totals Table
+                    self.adjustTotal(self.target.cardData.index(selectedCard))
+                else:
+                    print("Three copies of ",selectedCard.dataDict['name'], " have already been added to the deck")
+
+            #if the card is not a battle card, than duplicate cards cannot be added
+            else:
+                print("Duplicate Bot or Stratagem Cards Cannot Be Added")
+
+        #If the card has not been added yet, add it to its proper selection section
+        else:
+            print("Adding: " + selectedCard.dataDict['name'] + " To the deck")
+            #Add the card to the treeview
+            self.target.addCard(selectedCard)
+
+            #Add The Cards Data To The Totals Table
+            self.adjustTotal(self.target.cardData.index(selectedCard))
+
+
     #method for setting which treeview cards should be added to
     def setTarget(self,CardSelectionTree):
         self.target = CardSelectionTree
@@ -409,45 +457,10 @@ class CardView(QTreeView):
         super().mouseDoubleClickEvent(event)
         #If the left mouse button is pressed and it has selected an row add the card to the selection area
         if (event.button() == Qt.LeftButton and self.selectedIndexes()):
-            print("double click result:")
-            #using current row, get selected card data
-            selectedCard = self.cardData[self.currentRow]
+            #check to see if the card has already been added, if so adjust quantity column if quantity < 3, if not add the card
+            self.checkCard()
 
-            #Check if the card is already in the selection CardView
-            if (selectedCard in (self.target.cardData)):
-                print("Card is a duplicate")
-                #If the card to be added to the deck is a Battle Card (Action, Secret Action, Upgrade)
-                if (self.target.type == "Battle"):
-                    #find the location of the card (the location in the parallel list will be identical to the row in the treeview)
-                    cardLocation = self.target.cardData.index(selectedCard)
-                    #using the cards location and the quantity column (2) pull the quantity from the treeview
-                    dataIndex = (self.target.model.index(cardLocation,2))
-                    quantity = int(self.target.model.data(dataIndex,Qt.DisplayRole))
-                    #by rule only 3 of the same battle card are allowed in the same deck, this enforces that constraint
-                    if (quantity < 3):
-                        #increment quantity
-                        quantity += 1
-                        #add new quantity to treeview
-                        self.target.model.setData(dataIndex, quantity)
-                        print("The Quantity of: " + selectedCard.dataDict['name'] + " is now ", quantity)
-
-                        #Add The Cards Data To The Totals Table
-                        self.adjustTotal(self.target.cardData.index(selectedCard))
-                    else:
-                        print("Three copies of ",selectedCard.dataDict['name'], " have already been added to the deck")
-
-                #if the card is not a battle card, than duplicate cards cannot be added
-                else:
-                    print("Duplicate Bot or Stratagem Cards Cannot Be Added")
-
-            #If the card has not been added yet, add it to its proper selection section
-            else:
-                print("Adding: " + selectedCard.dataDict['name'] + " To the deck")
-                #Add the card to the treeview
-                self.target.addCard(selectedCard)
-
-                #Add The Cards Data To The Totals Table
-                self.adjustTotal(self.target.cardData.index(selectedCard))
+    
 
            
 

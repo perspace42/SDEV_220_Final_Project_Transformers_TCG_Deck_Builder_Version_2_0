@@ -27,11 +27,13 @@
 
 # The sections from top to bottom, contain the object widget, location on screen, and name.
 from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtWidgets import QFileDialog
 
-#import the custom treeview
+#import the custom classes and functions
 from Card_Selection import *
 from Card_Removal import *
 from Card_Total import *
+from Deck_File import *
 
 
 class Ui_MainWindow(object):
@@ -401,6 +403,10 @@ class Ui_MainWindow(object):
         #Inserting Actions Into File Menu
 
         #Save File
+
+        #stores current File Name
+        self.currentFile = ""
+
         self.actionSave = QtWidgets.QAction(MainWindow)
         self.actionSave.setObjectName("actionSave")
 
@@ -419,12 +425,18 @@ class Ui_MainWindow(object):
         self.actionExit.setObjectName("actionExit")
         self.actionExit.triggered.connect(lambda func: [print("Closing Window"),MainWindow.close()])
 
-        #CLose File
+        #Open File
+        self.actionOpen = QtWidgets.QAction(MainWindow)
+        self.actionOpen.setObjectName("actionOpen")
+        self.actionOpen.triggered.connect(lambda func: [print("Opening File"),self.openFile()])
+
+        #Close File
         self.actionClose = QtWidgets.QAction(MainWindow)
         self.actionClose.setObjectName("actionClose")
 
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionSave_As)
+        self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionNew)
         self.menuFile.addAction(self.actionClose)
         self.menuFile.addAction(self.actionExit)
@@ -547,7 +559,7 @@ class Ui_MainWindow(object):
         self.actionNew.setText(_translate("MainWindow", "New"))
         self.actionExit.setText(_translate("MainWindow", "Exit"))
         self.actionClose.setText(_translate("MainWindow", "Close"))   
-
+        self.actionOpen.setText(_translate("MainWindow","Open"))
         self.TotalsLabel.setText(_translate("MainWindow","Deck:"))
 
     
@@ -566,6 +578,57 @@ class Ui_MainWindow(object):
         newUi.setupUi(newMainWindow)
         #show the new main window
         newMainWindow.showMaximized()
+
+    #Open a deck (formatted txt) file
+    def openFile(self):
+        #set file options
+        fileOptions = QFileDialog.Options()
+        #set file type
+        fileType = "Text Files (*.txt)"
+        #get file name
+        fileName = QFileDialog.getOpenFileName(MainWindow,"Open Deck","",fileType,options = fileOptions)
+        #confirm file name is valid, if it is open it
+        if (fileName):
+            #set the current file equal to the file name
+            #NOTE fileName is automatically returned as a tuple, [0] returns the string
+            self.currentFile = fileName[0]
+            #get the file Data, and convert it to an organized tuple containing several lists
+            fileData = readFile(self.currentFile)
+            #sort data into lists from the fileData
+
+            #pull Bot Card path Data list from the provided list
+            botData = fileData[0]
+            #pull Battle Card path Data list from the provided list, and then from the from the tuple within that list
+            battleData = fileData[1][0]
+            #pull Battle Card quantity Data list from the provided list, and then from the from the tuple within that list
+            battleQuantity = fileData[1][1]
+            #pull Stratagem Card path data from the provided list
+            stratagemData = fileData[2]
+
+            #if the lists are not None (automatically happens when no data of that type is found), add the data from them into the treeviews
+
+            #add bot cards if there are any
+            if (botData != None):
+                botData = cardsFromText(botData,botCardList)
+                #iterate across the data, adding the cards to the treeview
+                for index in range(len(botData)):
+                    self.SelectedBotCards.checkCard(botData[index])
+
+            #add battle cards if there are any
+            if (battleData != None):
+                battleData = cardsFromText(battleData,battleCardList)
+                #iterate across the data, adding the cards to the treeview
+                for index in range(len(battleData)):
+                    #add the card a number of times equal to its quanity
+                    for card in range(int(battleQuantity[index])):
+                        self.SelectedBattleCards.checkCard(battleData[index])
+
+            #add stratagem cards if there are any
+            if (stratagemData != None):
+                stratagemData = cardsFromText(stratagemData,stratagemCardList)
+                #iterate across the data, adding the cards to the treeview
+                for index in range(len(stratagemData)):
+                    self.SelectedStrategemCards.checkCard(stratagemData[index])
 
         
 if __name__ == "__main__":

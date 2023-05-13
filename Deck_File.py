@@ -7,7 +7,6 @@ Purpose: Create the functions to save cards added to the deck to a file and pull
 those cards from the file to the deck
 '''
 from Card_Data import *
-from Read_Database import *
 
 #Function To Open A new TXT File
 def openFile(fileName = ""):
@@ -134,11 +133,22 @@ def readFile(fileName):
     print("Bot Cards:\n" , botData , "\n")
     print("Battle Cards:\n",battleData,"\n")
     print("Stratagem Cards:\n",stratagemData,"\n")
+
+    return (botData,battleData,stratagemData)
     
     
 
-#This is for test purposes no card will have a quantity value greater than 3
-battleQuantityList = [0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9]
+#convert a list of path strings to a list of cards by using the path strings to find the correct cards in the complete card list
+def cardsFromText(cardList,completeCardList):
+    for outer in range(len(cardList)):
+        for inner in range(len(completeCardList)):
+            currentCard = completeCardList[inner]
+            currentPath = cardList[outer]
+            #if the path string matches, then the correct card has been found
+            if currentPath == currentCard.dataDict['path']:
+                cardList[outer] = currentCard
+                #if the card has been found return to the outer loop
+                break
 
-saveFile("test.txt",botCardList,(battleCardList,battleQuantityList),stratagemCardList)
-readFile("test.txt")
+    #return the list of cards
+    return cardList
