@@ -27,7 +27,6 @@ def openFile(fileName = ""):
 def saveFile(fileName,botData = None, battleData = None, stratagemData = None):
     #open the file
     file = open(fileName,"w")
-
     #if their is any data to write
     if (botData != None):
         #write a header to mark which data is being written

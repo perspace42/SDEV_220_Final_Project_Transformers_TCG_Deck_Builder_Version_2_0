@@ -396,14 +396,20 @@ class Ui_MainWindow(object):
         self.Totals.reset()
        
     #save a deck (formatted text) file as the file that the user inputs
-    def saveDeckAs(self):
+    def saveDeckAs(self,new = False):
         #set file options
         fileOptions = QFileDialog.Options()
         #set file type
         fileType = "Text Files (*.txt)"
         #get file name
         fileName = QFileDialog.getSaveFileName(None,"Open Deck","",fileType,options = fileOptions)
-        
+        #if file is new, place it in its intended location before writing
+        if (new == True):
+            tempFile = open(fileName[0],"r")
+            #close file to avoid memory leak
+            tempFile.close()
+            
+        #if the file path is correct write to the file
         if (os.path.exists(fileName[0])):
             #store current File
             self.currentFile = fileName[0]
@@ -438,7 +444,7 @@ class Ui_MainWindow(object):
 
 
             #save the file
-            saveFile(self.currentFile,botCards,battleTuple,strategemCards)
+            saveFile(fileName[0],botCards,battleTuple,strategemCards)
 
     #saves a deck (formatted text file) to the file the user has previously specified
     #if none has been specified the user is asked to submit a file
