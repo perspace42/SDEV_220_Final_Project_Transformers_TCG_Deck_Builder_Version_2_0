@@ -35,6 +35,8 @@ from Card_Removal import *
 from Card_Total import *
 from Deck_File import *
 
+import os
+
 
 class Ui_MainWindow(object):
     
@@ -311,7 +313,8 @@ class Ui_MainWindow(object):
         #get file name
         fileName = QFileDialog.getOpenFileName(MainWindow,"Open Deck","",fileType,options = fileOptions)
         #confirm file name is valid, if it is open it
-        if (fileName):
+        print(fileName[0])
+        if (os.path.exists(fileName[0])):
             #set the current file equal to the file name
             #NOTE fileName is automatically returned as a tuple, [0] returns the string
             self.currentFile = fileName[0]
@@ -399,9 +402,9 @@ class Ui_MainWindow(object):
         #set file type
         fileType = "Text Files (*.txt)"
         #get file name
-        fileName,check = QFileDialog.getSaveFileName(None,"Open Deck","",fileType,options = fileOptions)
+        fileName = QFileDialog.getSaveFileName(None,"Open Deck","",fileType,options = fileOptions)
         
-        if (fileName):
+        if (os.path.exists(fileName[0])):
             #store current File
             self.currentFile = fileName[0]
             #If there are any battle cards in the deck get both them and their quantity, otherwise set battleCards to None
@@ -435,7 +438,7 @@ class Ui_MainWindow(object):
 
 
             #save the file
-            saveFile(fileName[0],botCards,battleTuple,strategemCards)
+            saveFile(self.currentFile,botCards,battleTuple,strategemCards)
 
     #saves a deck (formatted text file) to the file the user has previously specified
     #if none has been specified the user is asked to submit a file
