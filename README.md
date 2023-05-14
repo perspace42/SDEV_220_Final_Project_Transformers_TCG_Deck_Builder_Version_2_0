@@ -11,15 +11,18 @@ Cards Within the deck builder (besides Strategems are color coded to reflect the
 Bot Cards:
 - Red = Autobots 
 - Purple = Decepticons
-- Dark Gray = Mercenaries 
-Battle Cards:
+- Dark Gray = Mercenaries
+ 
+Battle Cards (Actions):
 - Dark Gray = Secret Actions
 - White = Actions
-- Upgrades
+
+Battle Cards (Upgrades):
 - Orange = Weapons
 - Green = WeaponArmors
 - Blue = Armors
 - Gray = Utilities
+
 (Stratagem Cards Are Not Color Coded)
     
 ### Controls
