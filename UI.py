@@ -107,7 +107,7 @@ class Ui_MainWindow(object):
         self.BattleCardTree.addData(self.BattleCardTree.model,battleCardList)
 
         #add BattleCardTree to window
-        self.BattleCardTree.setGeometry(QtCore.QRect(0, 0, 363, 477)) #313: 363
+        self.BattleCardTree.setGeometry(QtCore.QRect(0, 0, 363, 477)) 
         self.BattleCardTree.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.BattleCardTree.setObjectName("BattleCardTree")
 
@@ -124,7 +124,7 @@ class Ui_MainWindow(object):
         self.StrategemCardTree.addData(self.StrategemCardTree.model, stratagemCardList)
 
         #add StrategemCardTree to window
-        self.StrategemCardTree.setGeometry(QtCore.QRect(0, 0, 363, 477)) #313: 363
+        self.StrategemCardTree.setGeometry(QtCore.QRect(0, 0, 363, 477)) 
         self.StrategemCardTree.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.StrategemCardTree.setObjectName("StrategemCardTree")
 
@@ -178,7 +178,6 @@ class Ui_MainWindow(object):
 
         #configure label for the totals widget
         self.TotalsLabel = QtWidgets.QLabel(self.centralwidget)
-        #70 was changed to 30
         self.TotalsLabel.setGeometry(QtCore.QRect(507,10,231,20))
         self.TotalsLabel.setObjectName("TotalsLabel")
 

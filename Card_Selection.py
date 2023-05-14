@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import  QTreeView, QAbstractItemView
 from Read_Database import *
 from Card_Preview import *
 
-#NOTE These three functions (while functional) need to be optimized as alot of their code can be eliminated due to the Card_Selection.py files updated structure
+
 
 #Function To Add bot cards to treeview data model
 def treeBotCards(model,list):
@@ -425,6 +425,7 @@ class CardView(QTreeView):
                 self.table.addValue(-1,cardType)
 
     #Output the signals
+    #on mouse left click display the card to the card preview widget
     def mousePressEvent(self,event):
         #override the default event behavior
         super().mousePressEvent(event)
@@ -451,7 +452,7 @@ class CardView(QTreeView):
             #add image to image preview
             self.imageWidget.addImage(path)
             
-
+    #on double mouse left click display the card to the card preview widget
     def mouseDoubleClickEvent(self,event):
         #override the default event behavior
         super().mouseDoubleClickEvent(event)
