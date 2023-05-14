@@ -93,7 +93,7 @@ def readFile(fileName):
     #print(fileLines)
 
     #If file contains bot card data
-    if (fileLines[0] == "Bot Cards Header:"):
+    if ("Bot Cards Header:" in fileLines):
         counter = 1
         end = fileLines.index('Bot Cards Footer')
         #while the end of the bot section hasn't been reached, continue iteration

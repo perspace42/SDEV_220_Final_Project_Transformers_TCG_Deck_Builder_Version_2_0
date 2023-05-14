@@ -1,9 +1,0 @@
-Bot Cards Header:
-./img/bot/private_tote.jpg
-./img/bot/starscream_decepticon_king.jpg
-Bot Cards Footer
-Battle Cards Header:
-./img/battle/backup_plan.jpg(1)
-./img/battle/ancient_wisdom.jpg(1)
-./img/battle/terrifying_resilience.jpg(3)
-Battle Cards Footer
