@@ -1,0 +1,11 @@
+Bot Cards Header:
+./img/bot/private_firedrive.jpg
+./img/bot/private_lionizer.jpg
+./img/bot/private_pteraxadon.png
+Bot Cards Footer
+Strategem Cards Header:
+./img/stratagem/heroic_spotlight.jpg
+Strategem Cards Footer
+Battle Cards Header:
+./img/battle/crystal_of_power.jpg(3)
+Battle Cards Footer

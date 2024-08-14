@@ -315,15 +315,21 @@ class Ui_MainWindow(object):
         #confirm file name is valid, if it is open it
         print(fileName[0])
         if (os.path.exists(fileName[0])):
+            #close any currently open file:
+            self.closeDeck()
             #set the current file equal to the file name
             #NOTE fileName is automatically returned as a tuple, [0] returns the string
             self.currentFile = fileName[0]
-            #get the file Data, and convert it to an organized tuple containing several lists
-            fileData = readFile(self.currentFile)
+            #attempt to get the file Data, and convert it to an organized tuple containing several lists
+            try:
+                fileData = readFile(self.currentFile)
+            #if a problem occurs exit
+            except Exception as e:
+                print(f"While attempting to read the file: {e} occurred")
+                return
+            
             #sort data into lists from the fileData
             
-            
-
             #pull Bot Card path Data list from the provided list
             botData = fileData[0]
             
@@ -396,19 +402,20 @@ class Ui_MainWindow(object):
         self.Totals.reset()
        
     #save a deck (formatted text) file as the file that the user inputs
-    def saveDeckAs(self,new = False):
+    def saveDeckAs(self):
         #set file options
         fileOptions = QFileDialog.Options()
         #set file type
         fileType = "Text Files (*.txt)"
         #get file name
-        fileName = QFileDialog.getSaveFileName(None,"Open Deck","",fileType,options = fileOptions)
-        #if file is new, place it in its intended location before writing
-        if (new == True):
-            tempFile = open(fileName[0],"r")
+        fileName = QFileDialog.getSaveFileName(None,"Save Deck As","",fileType,options = fileOptions)
+        
+        #As long as a file name is provided
+        if fileName[0] != "":
+            tempFile = open(fileName[0],"w")
             #close file to avoid memory leak
             tempFile.close()
-            
+        
         #if the file path is correct write to the file
         if (os.path.exists(fileName[0])):
             #store current File
@@ -442,7 +449,8 @@ class Ui_MainWindow(object):
             else:
                 strategemCards = self.SelectedStrategemCards.cardData
 
-
+            #set the current file to the filename
+            self.currentFile = fileName[0]
             #save the file
             saveFile(fileName[0],botCards,battleTuple,strategemCards)
 

@@ -1,0 +1,13 @@
+Bot Cards Header:
+./img/bot/starscream_decepticon_king.jpg
+./img/bot/general_optimus_prime_galactic_commander.jpg
+./img/bot/deadlock_soldier_of_fortune.jpg
+Bot Cards Footer
+Strategem Cards Header:
+./img/stratagem/heroic_spotlight.jpg
+Strategem Cards Footer
+Battle Cards Header:
+./img/battle/overheat.jpg(1)
+./img/battle/unflinching_courage.jpg(1)
+./img/battle/improvised_shield.jpg(3)
+Battle Cards Footer

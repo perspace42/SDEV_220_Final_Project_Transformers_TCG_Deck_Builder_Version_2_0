@@ -1,0 +1,12 @@
+Bot Cards Header:
+./img/bot/lord_megatron_conqueror_of_cybertron.jpg
+Bot Cards Footer
+Strategem Cards Header:
+./img/stratagem/villainous_spotlight.jpg
+Strategem Cards Footer
+Battle Cards Header:
+./img/battle/war_of_attrition.jpg(3)
+./img/battle/counterespionage.jpg(1)
+./img/battle/backup_plan.jpg(1)
+./img/battle/ancient_wisdom.jpg(1)
+Battle Cards Footer

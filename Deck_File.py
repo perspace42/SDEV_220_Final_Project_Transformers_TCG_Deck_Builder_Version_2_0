@@ -8,16 +8,13 @@ those cards from the file to the deck
 '''
 from Card_Data import *
 
-#Function To Open A new TXT File
-def openFile(fileName = ""):
-    if (fileName == ""):
-        fileName == "newDeck.txt"
-    
-    
-    file = open(fileName,"w")
-    file.close()
-
-    return fileName
+#Headers and Footers for the Deck File to separate card types
+botCardHeader = "Bot Cards Header:"
+botCardFooter = "Bot Cards Footer"
+battleCardHeader = "Battle Cards Header:"
+battleCardFooter = "Battle Cards Footer"
+stratCardHeader = "Strategem Cards Header:"
+stratCardFooter = "Strategem Cards Footer"
 
 #using the list of cards within each treeview, save the added cards to the file
 #file assumes that if a parameter is None, their is no data of that type to save
@@ -30,24 +27,24 @@ def saveFile(fileName,botData = None, battleData = None, stratagemData = None):
     #if their is any data to write
     if (botData != None):
         #write a header to mark which data is being written
-        file.write("Bot Cards Header:\n")
+        file.write(botCardHeader + "\n")
         #iterate across the data
         for index in range(len(botData)):
             #store each card with its unique image file path
             file.write(botData[index].dataDict['path'] + "\n")
         
-        file.write("Bot Cards Footer\n")
+        file.write(botCardFooter + "\n")
 
     #if their is any data to write
     if (stratagemData != None):
         #write a header to mark which data is being written
-        file.write("Stratagem Cards Header:\n")
+        file.write(stratCardHeader + "\n")
         #iterate across the data
         for index in range(len(stratagemData)):
             #store each card with its unique image file path
             file.write(stratagemData[index].dataDict['path'] + "\n")
 
-        file.write("Stratagem Cards Footer\n")
+        file.write(stratCardFooter + "\n")
 
     #if their is any data to write
     if (battleData != None):
@@ -55,7 +52,7 @@ def saveFile(fileName,botData = None, battleData = None, stratagemData = None):
         battleCards = battleData[0] #this one stores the card data
         battleQuantity = battleData[1] #this one stores the number of times that card is in the deck
         #write a header to mark which data is being written
-        file.write("Battle Cards Header:\n")
+        file.write(battleCardHeader + "\n")
         #iterate across the data
         for index in range(len(battleCards)):
             #store each card with its unique image file path
@@ -63,7 +60,7 @@ def saveFile(fileName,botData = None, battleData = None, stratagemData = None):
             #store the amount each card is within the deck
             file.write("(" + str(battleQuantity[index]) + ")\n")
 
-        file.write("Battle Cards Footer")
+        file.write("Battle Cards Footer") #No need for newline footer is at end of file
 
     #close the file
     file.close()
@@ -92,9 +89,9 @@ def readFile(fileName):
     #print(fileLines)
 
     #If file contains bot card data
-    if ("Bot Cards Header:" in fileLines):
+    if (botCardHeader in fileLines):
         counter = 1
-        end = fileLines.index('Bot Cards Footer')
+        end = fileLines.index(botCardFooter)
         #while the end of the bot section hasn't been reached, continue iteration
         for counter in range(counter,end):
             botData.append(fileLines[counter])
@@ -103,9 +100,9 @@ def readFile(fileName):
         botData = None
     
     #If file contains stratagem card data
-    if ("Stratagem Cards Header:" in fileLines):
-        counter = fileLines.index("Stratagem Cards Header:") + 1
-        end = fileLines.index('Stratagem Cards Footer') 
+    if (stratCardHeader in fileLines):
+        counter = fileLines.index(stratCardHeader) + 1
+        end = fileLines.index(stratCardFooter) 
         for counter in range(counter,end):
             stratagemData.append(fileLines[counter])
             #print(fileLines[counter])
@@ -113,9 +110,9 @@ def readFile(fileName):
         stratagemData = None
 
     #If file contains battle card data
-    if ("Battle Cards Header:" in fileLines):
-        counter = fileLines.index("Battle Cards Header:") + 1
-        end = fileLines.index("Battle Cards Footer") 
+    if (battleCardHeader in fileLines):
+        counter = fileLines.index(battleCardHeader) + 1
+        end = fileLines.index(battleCardFooter) 
         for counter in range(counter,end):
             #get the quantity from the string
             battleQuantity.append(fileLines[counter][-2])
